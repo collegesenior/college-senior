@@ -335,7 +335,7 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
                             {/* <TableOfContents sections={getTableOfContents('courses')} collegeName={college.name} /> */}
                             <section className="rounded-2xl" id="courses-fees-2026">
                                 <CourseFeeTabNew 
-                                    courseOfferings={college.course_offerings.map(offering => ({
+                                    courseOfferings={college.course_offerings.map((offering:any) => ({
                                         ...offering,
                                         course: {
                                             ...offering.course,
