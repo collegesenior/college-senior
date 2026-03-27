@@ -1,38 +1,38 @@
+'use client';
+
 import { prisma } from '@/lib/prisma';
+import { useEffect, useState } from 'react';
 
-export default async function DebugPage() {
-  let dbStatus = 'Unknown';
-  let collegeCount = 0;
-  let sampleCollege = null;
-  let envStatus = {};
+export default function DebugPage() {
+  const [debugData, setDebugData] = useState({
+    dbStatus: 'Loading...',
+    collegeCount: 0,
+    sampleCollege: null,
+    envStatus: {}
+  });
 
-  try {
-    // Test database connection
-    const colleges = await prisma.colleges.findMany({
-      take: 1,
-      select: {
-        id: true,
-        name: true,
-        slug: true,
-        logo_url: true,
-        banner_url: true
+  useEffect(() => {
+    async function fetchDebugData() {
+      try {
+        const response = await fetch('/api/debug');
+        const data = await response.json();
+        
+        setDebugData({
+          dbStatus: data.status === 'success' ? 'Connected' : `Error: ${data.message}`,
+          collegeCount: data.counts?.colleges || 0,
+          sampleCollege: data.sampleData || null,
+          envStatus: data.environment || {}
+        });
+      } catch (error: any) {
+        setDebugData(prev => ({
+          ...prev,
+          dbStatus: `Error: ${error.message}`
+        }));
       }
-    });
-    
-    collegeCount = await prisma.colleges.count();
-    sampleCollege = colleges[0] || null;
-    dbStatus = 'Connected';
-  } catch (error: any) {
-    dbStatus = `Error: ${error.message}`;
-  }
+    }
 
-  // Check environment variables
-  envStatus = {
-    DATABASE_URL: process.env.DATABASE_URL ? 'Set' : 'Missing',
-    SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL ? 'Set' : 'Missing',
-    SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? 'Set' : 'Missing',
-    NODE_ENV: process.env.NODE_ENV
-  };
+    fetchDebugData();
+  }, []);
 
   return (
     <div className="p-8 max-w-4xl mx-auto">
@@ -41,35 +41,33 @@ export default async function DebugPage() {
       <div className="space-y-6">
         <div className="bg-gray-100 p-4 rounded">
           <h2 className="text-xl font-semibold mb-2">Environment Variables</h2>
-          <pre className="text-sm">{JSON.stringify(envStatus, null, 2)}</pre>
+          <pre className="text-sm">{JSON.stringify(debugData.envStatus, null, 2)}</pre>
         </div>
 
         <div className="bg-gray-100 p-4 rounded">
           <h2 className="text-xl font-semibold mb-2">Database Status</h2>
-          <p><strong>Status:</strong> {dbStatus}</p>
-          <p><strong>College Count:</strong> {collegeCount}</p>
+          <p><strong>Status:</strong> {debugData.dbStatus}</p>
+          <p><strong>College Count:</strong> {debugData.collegeCount}</p>
         </div>
 
-        {sampleCollege && (
+        {debugData.sampleCollege && (debugData.sampleCollege as any).logo_url && (
           <div className="bg-gray-100 p-4 rounded">
             <h2 className="text-xl font-semibold mb-2">Sample College Data</h2>
-            <pre className="text-sm">{JSON.stringify(sampleCollege, null, 2)}</pre>
+            <pre className="text-sm">{JSON.stringify(debugData.sampleCollege, null, 2)}</pre>
             
-            {sampleCollege.logo_url && (
-              <div className="mt-4">
-                <h3 className="font-semibold">Logo Test:</h3>
-                <img 
-                  src={sampleCollege.logo_url} 
-                  alt="College Logo" 
-                  className="w-20 h-20 object-contain border"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).style.border = '2px solid red';
-                    (e.target as HTMLImageElement).alt = 'Image failed to load';
-                  }}
-                />
-                <p className="text-sm text-gray-600">URL: {sampleCollege.logo_url}</p>
-              </div>
-            )}
+            <div className="mt-4">
+              <h3 className="font-semibold">Logo Test:</h3>
+              <img 
+                src={(debugData.sampleCollege as any).logo_url} 
+                alt="College Logo" 
+                className="w-20 h-20 object-contain border"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.border = '2px solid red';
+                  (e.target as HTMLImageElement).alt = 'Image failed to load';
+                }}
+              />
+              <p className="text-sm text-gray-600">URL: {(debugData.sampleCollege as any).logo_url}</p>
+            </div>
           </div>
         )}
 
