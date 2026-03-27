@@ -32,8 +32,8 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
     const galleryPara = getSectionContent("gallery");
     const campusPara = getSectionContent("campus");
 
-    const admissionSteps = (college.admissions[0]?.admission_process as unknown as AdmissionStep[]) || [];
-    const PlacementStats = (college.placements[0]?.placement_stats as unknown as PlacementStat[])?.[0] || null;
+    const admissionSteps = (college.admissions?.[0]?.admission_process as unknown as AdmissionStep[]) || [];
+    const PlacementStats = (college.placements?.[0]?.placement_stats as unknown as PlacementStat[])?.[0] || null;
     const facilityData = (college.facilities[0]?.all_facilities as unknown as FacilityJSON) || null;
     const facilityList = facilityData?.Facilities || [];
     const faqData = college.faqs?.[0]?.faq_data as unknown as FAQGroup[];
@@ -68,7 +68,7 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
                     <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
                         <Users className="text-blue-600 mb-2" size={20} />
                         <p className="text-[10px] text-gray-400 uppercase font-bold">Avg Package</p>
-                        <p className="text-lg font-bold">₹{college.avg_package || 'N/A'}</p>
+                        <p className="text-lg font-bold">₹{(college as any).avg_package || 'N/A'}</p>
                     </div>
                     <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
                         <BookOpen className="text-blue-600 mb-2" size={20} />
@@ -110,7 +110,7 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {college.course_offerings.slice(0, 10).map((offering:any) => (
+                            {college.course_offerings.slice(0, 10).map((offering: any) => (
                                 <tr
                                     key={offering.id}
                                     className="border-b border-gray-300 last:border-b-0 hover:bg-gray-50"
@@ -155,7 +155,7 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
                     </button>
                 </div>
 
-                {college.admissions.slice(0, 2).map((admission:any) => {
+                {college.admissions && college.admissions.length > 0 && college.admissions.slice(0, 2).map((admission) => {
                     // Parse the steps specifically for this admission record
 
 
@@ -247,7 +247,7 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
                 <div className="mt-6">
                     <h3 className="font-bold text-gray-700 my-5">{college.name} Top Recruiters</h3>
                     <div className="flex flex-wrap gap-4">
-                        {college.placements[0]?.top_recruiters?.map((recruiter: string, index: number) => (
+                    {college.placements && college.placements.length > 0 && college.placements[0]?.top_recruiters?.map((recruiter: string, index: number) => (
                             <div key={index} className="px-4 py-2 bg-blue-100 border border-blue-300 rounded-bl rounded-full text-sm font-medium text-gray-700">
                                 {recruiter}
                             </div>
@@ -350,7 +350,7 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
                         </thead>
                         <tbody className="">
                             {college.scholarships && college.scholarships.length > 0 ? (
-                                college.scholarships.slice(0, 5).flatMap((sch:any) => {
+                                college.scholarships.slice(0, 5).flatMap((sch) => {
                                     const schDataArray = sch.scholarship_data as unknown as Array<{ type?: string; name?: string; eligibility?: string; amount?: string; amount_desc?: string; description?: string }>;
                                     return schDataArray.slice(0, 5).map((schData, idx) => (
                                         <tr key={`${sch.id}-${idx}`} className="hover:bg-gray-50 transition-colors border-b border-gray-300 last:border-b-0">
@@ -455,7 +455,7 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
                 </div>
                 <p className="text-gray-600">{galleryPara || ""}</p>
                 <div className="space-y-10">
-                    {college.images?.map((cat:any) => {
+                    {college.images?.map((cat) => {
                         // Cast the JSON array correctly
                         const items = cat.media_url as unknown as GalleryMedia[];
 
@@ -563,7 +563,7 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
 
                 <div className="space-y-4">
                     {college.news && college.news.length > 0 ? (
-                        college.news.slice(0, 3).map((item:any) => {
+                        college.news.slice(0, 3).map((item) => {
                             // Cast the JSON data for this specific news record
                             const data = item.news_data as unknown as NewsContent;
 
