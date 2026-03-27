@@ -472,7 +472,7 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
                                     <h2 className="text-2xl font-bold mb-6">{college.name} Ranking Details</h2>
                                     <p className="text-gray-600 my-6">{rankingPara}</p>
                                     <RankingTab
-                                        rankings={college.rankings?.flatMap(record => 
+                                        rankings={college.rankings?.flatMap((record:any) => 
                                             record.rank_data as unknown as Array<{ org: string; data: Array<{ year: number; rank: number | null; score?: string; stream: string; desc?: string }> }>
                                         ) || []}
                                         collegeName={college.name}
