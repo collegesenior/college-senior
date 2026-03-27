@@ -48,7 +48,7 @@ const UpdateDetailPage = async ({ params }: { params: Promise<{ slug: string }> 
 
                 {/* Article Body */}
                 <div className="prose prose-blue max-w-none text-gray-700 leading-relaxed space-y-6">
-                  {update.content.split('\n').map((paragraph, index) => (
+                  {update.content.split('\n').map((paragraph: string, index: number) => (
                     <p key={index} className="text-lg">
                       {paragraph}
                     </p>
