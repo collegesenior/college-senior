@@ -9,6 +9,9 @@ type CollegeType = {
   city: string;
   state: string;
   type: string;
+  ownership: string;
+  naac_grade: string;
+  nirf_ranking: number;
   established: number;
   website: string;
   email: string;
@@ -16,6 +19,7 @@ type CollegeType = {
   logo_url: string;
   image_url: string;
   overview: string;
+  description: string;
   meta_title: string;
   meta_description: string;
   created_at: Date;
