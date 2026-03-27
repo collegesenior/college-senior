@@ -350,7 +350,7 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
                         </thead>
                         <tbody className="">
                             {college.scholarships && college.scholarships.length > 0 ? (
-                                college.scholarships.slice(0, 5).flatMap((sch) => {
+                                college.scholarships.slice(0, 5).flatMap((sch:any) => {
                                     const schDataArray = sch.scholarship_data as unknown as Array<{ type?: string; name?: string; eligibility?: string; amount?: string; amount_desc?: string; description?: string }>;
                                     return schDataArray.slice(0, 5).map((schData, idx) => (
                                         <tr key={`${sch.id}-${idx}`} className="hover:bg-gray-50 transition-colors border-b border-gray-300 last:border-b-0">
@@ -455,7 +455,7 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
                 </div>
                 <p className="text-gray-600">{galleryPara || ""}</p>
                 <div className="space-y-10">
-                    {college.images?.map((cat) => {
+                    {college.images?.map((cat:any) => {
                         // Cast the JSON array correctly
                         const items = cat.media_url as unknown as GalleryMedia[];
 
@@ -563,7 +563,7 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
 
                 <div className="space-y-4">
                     {college.news && college.news.length > 0 ? (
-                        college.news.slice(0, 3).map((item) => {
+                        college.news.slice(0, 3).map((item:any) => {
                             // Cast the JSON data for this specific news record
                             const data = item.news_data as unknown as NewsContent;
 
