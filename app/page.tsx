@@ -72,7 +72,7 @@ export default async function HomePage() {
             className="absolute top-55 -left-45 border md:w-120 max-[765px]:hidden" />
         </div>
         <div className="md:w-1/2 3xl:justify-end flex tablet:justify-bottom md:content-end relative md:p-0">
-          <Image src="/hero.webp"
+          <Image src="/Hero.webp"
             alt="hero image"
             width={1000}
             height={200}
