@@ -155,7 +155,7 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
                     </button>
                 </div>
 
-                {college.admissions.slice(0, 2).map((admission) => {
+                {college.admissions.slice(0, 2).map((admission:any) => {
                     // Parse the steps specifically for this admission record
 
 
