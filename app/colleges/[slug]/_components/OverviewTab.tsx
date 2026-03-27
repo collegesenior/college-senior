@@ -110,7 +110,7 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {college.course_offerings.slice(0, 10).map((offering) => (
+                            {college.course_offerings.slice(0, 10).map((offering:any) => (
                                 <tr
                                     key={offering.id}
                                     className="border-b border-gray-300 last:border-b-0 hover:bg-gray-50"
