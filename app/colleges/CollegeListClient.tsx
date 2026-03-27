@@ -2,7 +2,25 @@
 import { useState, useTransition, useEffect } from 'react';
 import Headers from '../components/Header';
 import Footer from '../components/Footer';
-import { colleges as CollegeType } from '@prisma/client';
+type CollegeType = {
+  id: number;
+  name: string;
+  slug: string;
+  city: string;
+  state: string;
+  type: string;
+  established: number;
+  website: string;
+  email: string;
+  phone: string;
+  logo_url: string;
+  image_url: string;
+  overview: string;
+  meta_title: string;
+  meta_description: string;
+  created_at: Date;
+  updated_at: Date;
+};
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Search, Loader2, MapPin, Mail, Globe } from 'lucide-react';
 import Image from 'next/image';
