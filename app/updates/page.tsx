@@ -1,5 +1,16 @@
 import { prisma } from '@/lib/prisma'
-import { updates as UpdateType } from '@prisma/client'
+type UpdateType = {
+  id: number;
+  title: string;
+  slug: string;
+  content: string;
+  category: string;
+  published_date?: Date;
+  meta_title: string | null;
+  meta_description: string | null;
+  created_at: Date;
+  updated_at: Date;
+};
 import React from 'react';
 import Header from "../components/Header";
 import Footer from '../components/Footer';
