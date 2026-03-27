@@ -6,7 +6,14 @@ const nextConfig: NextConfig = {
       { hostname: 'yt3.googleusercontent.com' },
       { hostname: 'avit.ac.in' },
       { hostname: 'upload.wikimedia.org' },
-      { hostname: 'encrypted-tbn0.gstatic.com' }
+      { hostname: 'encrypted-tbn0.gstatic.com' },
+      { hostname: 'hpxcrsrghorymasufwem.supabase.co' },
+      { hostname: '*.supabase.co' },
+      { hostname: 'images.unsplash.com' },
+      { hostname: 'via.placeholder.com' },
+      { hostname: '*.googleapis.com' },
+      { hostname: '*.edu' },
+      { hostname: '*.ac.in' }
     ],
     formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
