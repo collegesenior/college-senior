@@ -4,7 +4,40 @@ import Image from "next/image"
 import Link from 'next/link';
 import Headers from '../components/Header';
 import Footer from '../components/Footer';
-import { courses as CourseType, colleges as CollegeType } from '@prisma/client';
+type CourseType = {
+  id: number;
+  name: string;
+  slug: string;
+  level: string;
+  duration: string;
+  avg_salary?: number;
+  created_at: Date;
+  updated_at: Date;
+};
+
+type CollegeType = {
+  id: number;
+  name: string;
+  slug: string;
+  city: string;
+  state: string;
+  type: string;
+  ownership: string;
+  naac_grade: string;
+  nirf_ranking: number;
+  established: number;
+  website: string;
+  email: string;
+  phone: string;
+  logo_url: string;
+  image_url: string;
+  overview: string;
+  description: string;
+  meta_title: string;
+  meta_description: string;
+  created_at: Date;
+  updated_at: Date;
+};
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Search, Loader2} from 'lucide-react';
 import EnquiryFormModal from '../components/EnquiryFormModal';
@@ -12,6 +45,8 @@ import { useScrollTrigger } from '../hooks/useScrollTrigger';
 
 // Define the type to include the colleges associated with each course
 type CourseWithColleges = CourseType & {
+  avg_fees?: string;
+  description?: string;
   offered_at_colleges: {
     college: CollegeType;
   }[];
