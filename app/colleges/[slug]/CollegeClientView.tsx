@@ -494,7 +494,7 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
                     {/* --- TAB: GALLERY (FULL LIST) --- */}
                     {activeTab === 'gallery' && (
                         <div className="space-y-10">
-                            {college.images?.map((cat) => {
+                            {college.images?.map((cat:any) => {
                                 // Cast the JSON array correctly
                                 const items = cat.media_url as unknown as GalleryMedia[];
 
