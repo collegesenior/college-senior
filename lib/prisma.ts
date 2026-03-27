@@ -2,7 +2,6 @@ import { PrismaClient } from '@prisma/client'
 import { Pool } from 'pg'
 import { PrismaPg } from '@prisma/adapter-pg'
 
-// Global type declaration at top level
 declare global {
   var prisma: PrismaClient | undefined;
 }
@@ -13,12 +12,15 @@ if (!connectionString) {
   throw new Error("DATABASE_URL is missing from environment variables!");
 }
 
+// Configure SSL for production (Vercel)
 const pool = new Pool({
   connectionString,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
-  max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
+  ssl: process.env.NODE_ENV === 'production' ? {
+    rejectUnauthorized: false
+  } : false,
+  max: 1,
+  idleTimeoutMillis: 0,
+  connectionTimeoutMillis: 10000,
 })
 
 const adapter = new PrismaPg(pool)
@@ -26,7 +28,7 @@ const adapter = new PrismaPg(pool)
 const prismaClientSingleton = () => {
   return new PrismaClient({ 
     adapter,
-    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error']
+    log: ['error']
   })
 }
 
