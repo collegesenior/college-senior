@@ -3,6 +3,10 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET() {
   try {
+    console.log('Testing database connection...');
+    console.log('DATABASE_URL exists:', !!process.env.DATABASE_URL);
+    console.log('NODE_ENV:', process.env.NODE_ENV);
+    
     const collegeCount = await prisma.colleges.count();
     const courseCount = await prisma.courses.count();
     
@@ -19,6 +23,7 @@ export async function GET() {
     return NextResponse.json({
       status: 'success',
       database: 'connected',
+      timestamp: new Date().toISOString(),
       counts: {
         colleges: collegeCount,
         courses: courseCount
@@ -31,9 +36,11 @@ export async function GET() {
       }
     });
   } catch (error: any) {
+    console.error('Database connection error:', error);
     return NextResponse.json({
       status: 'error',
       message: error.message,
+      stack: error.stack,
       environment: {
         NODE_ENV: process.env.NODE_ENV,
         DATABASE_URL: process.env.DATABASE_URL ? 'Set' : 'Missing',
