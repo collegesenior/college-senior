@@ -1,21 +1,42 @@
-import { Prisma } from '@prisma/client';
+// import { Prisma } from '@prisma/client';
 import { LucideProps } from "lucide-react";
 
-// 1. The Main Data Type from Prisma
-export type CollegeWithRelations = Prisma.collegesGetPayload<{
-    include: {
-        course_offerings: { include: { course: true } },
-        admissions: true,
-        placements: true,
-        cutoffs: true,
-        scholarships: true,
-        images: true,
-        rankings: true,
-        facilities: true,
-        news: true,
-        faqs: true,
-    }
-}>;
+// 1. The Main Data Type - Manual definition instead of Prisma
+export type CollegeWithRelations = {
+    id: number;
+    name: string;
+    slug: string;
+    city: string;
+    state: string;
+    type: string;
+    ownership: string;
+    naac_grade: string;
+    nirf_ranking: number;
+    established: number;
+    website: string;
+    email: string;
+    phone: string;
+    logo_url: string;
+    image_url: string;
+    banner_url: string;
+    overview: string;
+    description: string;
+    meta_title: string;
+    meta_description: string;
+    created_at: Date;
+    updated_at: Date;
+    course_offerings: any[];
+    admissions?: any[];
+    placements?: any[];
+    cutoffs?: any[];
+    scholarships?: any[];
+    images?: any[];
+    rankings?: any[];
+    facilities: any[];
+    news?: any[];
+    faqs?: any[];
+    structured_data?: any;
+};
 
 // 2. Structured Content (JSON Paragraphs)
 export interface SectionBlock {
