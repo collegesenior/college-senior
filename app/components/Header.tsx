@@ -12,6 +12,8 @@ export default function Header() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const pathname = usePathname();
 
+  const isHomePage = pathname === '/';
+
   const navLinks = [
     { name: 'Home', href: '/' },
     { name: 'Colleges', href: '/colleges' },
@@ -23,15 +25,24 @@ export default function Header() {
 
   const getLinkStyle = (href: string) => {
     const isActive = pathname === href;
-    return `px-3 py-2 transition font-medium  ${
-      isActive 
-        ? 'text-yellow-400 ' 
-        : 'text-white  hover:text-yellow-400'
+
+    return `px-3 py-2 transition font-medium ${
+      isHomePage
+        ? isActive
+          ? 'text-yellow-400'
+          : 'text-white hover:text-yellow-400'
+        : isActive
+        ? 'text-blue-600'
+        : 'text-gray-700 hover:text-blue-600'
     }`;
   };
 
   return (
-    <header className="max-w-387 mx-auto bg-[#0d68f2] sticky top-0 z-40">
+    <header
+      className={`max-w-387 mx-auto sticky top-0 z-40 shadow-sm ${
+        isHomePage ? 'bg-[#0d68f2]' : 'bg-[#FFF5EE]'
+      }`}
+    >
       <div className="flex items-center justify-between px-4 lg:px-12 py-4 max-w-400 mx-auto">
         
         {/* Logo */}
@@ -57,19 +68,34 @@ export default function Header() {
         {/* Action Buttons & Hamburger */}
         <div className="flex items-center space-x-4">
           <div className="hidden min-[1300px]:flex items-center space-x-4">
+            
             <button 
               onClick={() => setIsModalOpen(true)}
-              className="px-4 py-2 text-white font-semibold border border-white rounded-lg hover:bg-white hover:text-blue-600 transition"
+              className={`px-4 py-2 font-semibold border rounded-lg transition ${
+                isHomePage
+                  ? 'text-white border-white hover:bg-white hover:text-blue-600'
+                  : 'text-blue-600 border-blue-600 hover:bg-blue-600 hover:text-white'
+              }`}
             >
               Apply to Enquiry
             </button>
-            <Link href="/contact" className="px-6 py-2 bg-white text-[#0d68f2] rounded-md font-semibold hover:bg-gray-100 transition">
+
+            <Link 
+              href="/contact" 
+              className={`px-6 py-2 rounded-md font-semibold transition ${
+                isHomePage
+                  ? 'bg-white text-[#0d68f2] hover:bg-gray-100'
+                  : 'bg-blue-600 text-white hover:bg-blue-700'
+              }`}
+            >
               Talk to Expert
             </Link>
           </div>
 
           <button 
-            className="min-[1300px]:hidden text-white p-2 transition-transform duration-300 active:scale-90"
+            className={`min-[1300px]:hidden p-2 transition-transform duration-300 active:scale-90 ${
+              isHomePage ? 'text-white' : 'text-gray-800'
+            }`}
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? <X size={32} /> : <Menu size={32} />}
@@ -77,10 +103,11 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Animated Mobile/Tablet Drawer */}
+      {/* Mobile / Tablet Drawer */}
       <div 
         className={`
-          min-[1300px]:hidden bg-[#0d68f2] border-blue-400 absolute w-full left-0 overflow-hidden transition-all duration-500 ease-in-out
+          min-[1300px]:hidden absolute w-full left-0 overflow-hidden transition-all duration-500 ease-in-out
+          ${isHomePage ? 'bg-[#0d68f2]' : 'bg-gray-50'}
           ${isOpen 
             ? "max-h-150 opacity-100 py-8 visible" 
             : "max-h-0 opacity-0 py-0 invisible"}
@@ -92,23 +119,34 @@ export default function Header() {
               key={link.name} 
               href={link.href} 
               onClick={() => setIsOpen(false)}
-              className={`text-xl ${getLinkStyle(link.href)} border-b-0 inline-block`}
+              className={`text-xl ${getLinkStyle(link.href)}`}
             >
               {link.name}
             </Link>
           ))}
-          <hr className="border-blue-400" />
+
+          <hr className={isHomePage ? "border-blue-400" : "border-gray-300"} />
+
           <div className="flex flex-col space-y-4">
             <button 
               onClick={() => setIsModalOpen(true)}
-              className="w-full py-3 text-white border border-white rounded-lg font-bold"
+              className={`w-full py-3 rounded-lg font-bold border ${
+                isHomePage
+                  ? 'text-white border-white'
+                  : 'text-blue-600 border-blue-600'
+              }`}
             >
               Apply to Colleges
             </button>
+
             <Link 
               href="/contact" 
               onClick={() => setIsOpen(false)}
-              className="w-full py-3 bg-white text-[#0d68f2] text-center rounded-lg font-bold"
+              className={`w-full py-3 text-center rounded-lg font-bold ${
+                isHomePage
+                  ? 'bg-white text-[#0d68f2]'
+                  : 'bg-blue-600 text-white'
+              }`}
             >
               Talk to Expert
             </Link>
