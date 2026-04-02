@@ -3,37 +3,37 @@ import { useState, useTransition, useEffect } from 'react';
 import Headers from '../components/Header';
 import Footer from '../components/Footer';
 type CollegeType = {
-  id: number;
-  name: string;
-  slug: string;
-  city: string;
-  state: string;
-  type: string;
-  ownership: string;
-  naac_grade: string;
-  nirf_ranking: number;
-  established: number;
-  website: string;
-  email: string;
-  phone: string;
-  logo_url: string;
-  image_url: string;
-  overview: string;
-  description: string;
-  meta_title: string;
-  meta_description: string;
-  created_at: Date;
-  updated_at: Date;
+    id: number;
+    name: string;
+    slug: string;
+    city: string;
+    state: string;
+    type: string;
+    ownership: string;
+    naac_grade: string;
+    nirf_ranking: number;
+    established: number;
+    website: string;
+    email: string;
+    phone: string;
+    logo_url: string;
+    image_url: string;
+    overview: string;
+    description: string;
+    meta_title: string;
+    meta_description: string;
+    created_at: Date;
+    updated_at: Date;
 };
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Search, Loader2, MapPin, Mail, Globe } from 'lucide-react';
+import { Search, Loader2, MapPin, Mail, Globe, Settings2 } from 'lucide-react';
 import Image from 'next/image';
 import EnquiryFormModal from '../components/EnquiryFormModal';
 import { useScrollTrigger } from '../hooks/useScrollTrigger';
 
 interface Props {
-  initialColleges: CollegeType[];
-  currentParams: Record<string, string | undefined>;
+    initialColleges: CollegeType[];
+    currentParams: Record<string, string | undefined>;
 }
 
 export default function CollegeListClient({
@@ -124,11 +124,11 @@ export default function CollegeListClient({
             )}
 
             {/* Hero Section */}
-            <section className="max-w-375 mx-auto bg-linear-to-r bg-primary m-3 rounded-2xl text-white pt-4 pb-4 px-4 relative overflow-hidden">
-                <div className="max-w-10xl p-4 mx-auto">
+            <section className="max-w-375 mx-auto bg-linear-to-tr from-blue-500 to-indigo-600 m-3 md:rounded-2xl lg:rounded-2xl text-white pt-4 pb-4 px-4 relative overflow-hidden">
+                <div className="max-w-10xl p-3 mx-auto">
                     <div className="z-10 w-full lg:w-2/3">
-                        <p className="text-sm opacity-80 mb-2">Home / Colleges</p>
-                        <h2 className="text-2xl md:text-4xl font-bold mb-4">Find Your Perfect Colleges</h2>
+                        <p className="text-sm opacity-80 mb-10">Home / Colleges</p>
+                        <h2 className="text-2xl md:text-4xl font-bold">Find Your Perfect Colleges</h2>
                         <p className="text-md md:text-lg opacity-90 mb-4">
                             Explore hundreds of colleges to find the right one for you.
                         </p>
@@ -149,32 +149,30 @@ export default function CollegeListClient({
             </section>
 
             {/* Mobile Toggle Button */}
-            <div className="lg:hidden px-8 mb-2 ">
+            <div className="lg:hidden px-8 mb-2 flex justify-end">
                 <button
                     onClick={() => setIsFilterOpen(true)}
-                    className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-3 rounded-xl font-bold shadow-md"
+                    className="w-50 flex items-center justify-center gap-2 bg-blue-600 text-white py-3 rounded-xl font-bold shadow-md"
                 >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                    </svg>
+                    <Settings2 />
                     Filter Options
                 </button>
             </div>
 
             {/* Main */}
-            <main className="max-w-387 mx-auto p-3 md:px-8 md:py-10 flex flex-col lg:flex-row gap-8">
+            <main className="max-w-387 mx-auto p-3 md:px-4 md:py-4 flex flex-col lg:flex-row gap-6">
                 {/* Mobile Overlay Background */}
                 {isFilterOpen && (
                     <div
-                        className="fixed inset-0 bg-black/40 z-40 lg:hidden"
+                        className="fixed inset-0 bg-black/40 z-40 lg:hidden backdrop-blur-md"
                         onClick={() => setIsFilterOpen(false)}
                     />
                 )}
 
                 {/* Filters Sidebar */}
-                <aside className={`fixed sm:fixed md:fixed inset-0 z-40 lg:sticky lg:top-25 lg:z-10 w-80 h-240 bg-gray-50 p-10 overflow-y-auto transition-transform duration-300 lg:translate-x-0 lg:w-1/4 lg:block lg:bg-transparent lg:p-0
-          ${isFilterOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} `}>
-                    <div className="flex justify-between items-center mb-6 lg:mb-4">
+                <aside className={`fixed sm:fixed md:fixed inset-0 z-40  lg:sticky lg:top-25 lg:z-10 w-80 lg:h-200 sm:h-auto bg-gray-50 p-3 overflow-y-scroll transition-transform duration-300 lg:translate-x-0 lg:w-1/4 lg:block lg:bg-transparent lg:p-0
+          ${isFilterOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} `} style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                    <div className="flex justify-between items-center mb-6 lg:mb-2 p-2">
                         <h3 className="font-bold text-lg">Filters</h3>
                         <div className="flex items-center gap-4">
                             <button onClick={resetFilters} className="text-indigo-600 text-sm font-semibold">Reset</button>
@@ -212,46 +210,49 @@ export default function CollegeListClient({
                             );
 
                             return (
-                                <div key={block.title} className="bg-white h-70 pt-0 p-5 rounded-xl overflow-y-scroll no-scrollbar shadow-sm border border-gray-100 lg:border-none">
-                                    <div className='bg-white sticky top-0 py-5'>
-                                        <h4 className="font-bold">{block.title}</h4>
-                                        <div className="flex items-center gap-2 mt-2 border-b border-gray-100">
-                                            <button className="text-gray-400">
-                                                <Search size={16} />
-                                            </button>
-                                            <input
-                                                type="text"
-                                                placeholder="Search..."
-                                                className="grow py-2 outline-none text-sm"
-                                                // VALUE AND ONCHANGE: Update state for this block title
-                                                value={localSearch[block.title] || ""}
-                                                onChange={(e) => setLocalSearch({
-                                                    ...localSearch,
-                                                    [block.title]: e.target.value
-                                                })}
-                                            />
-                                        </div>
-                                    </div>
+                                <div className='bg-white p-1 rounded-xl shadow-sm'>
 
-                                    <div className="space-y-3 text-sm text-gray-700 mt-2">
-                                        {/* MAP FILTERED OPTIONS INSTEAD OF BLOCK.OPTIONS */}
-                                        {filteredOptions.length > 0 ? (
-                                            filteredOptions.map((opt) => (
-                                                <label key={opt} className="flex items-center cursor-pointer hover:text-indigo-600 transition-colors">
-                                                    <input
-                                                        type="checkbox"
-                                                        className="mr-3 accent-indigo-600 h-4 w-4"
-                                                        checked={searchParams.get(block.key) === opt}
-                                                        onChange={() => updateFilter(block.key, opt)}
-                                                    />
-                                                    <span className={searchParams.get(block.key) === opt ? "text-indigo-600 font-bold" : ""}>
-                                                        {opt}
-                                                    </span>
-                                                </label>
-                                            ))
-                                        ) : (
-                                            <p className="text-gray-400 text-xs italic py-2">No matches found</p>
-                                        )}
+                                    <div key={block.title} className="bg-white h-70 pt-0 p-3 rounded-xl overflow-y-scroll lg:border-none" style={{ scrollbarWidth: 'thin', msOverflowStyle: 'none', borderRadius: '19px' }}>
+                                        <div className='bg-white sticky top-0 py-5'>
+                                            <h4 className="font-bold">{block.title}</h4>
+                                            <div className="flex items-center gap-2 mt-2 border-b border-gray-100">
+                                                <button className="text-gray-400">
+                                                    <Search size={16} />
+                                                </button>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Search..."
+                                                    className="grow py-2 outline-none text-sm"
+                                                    // VALUE AND ONCHANGE: Update state for this block title
+                                                    value={localSearch[block.title] || ""}
+                                                    onChange={(e) => setLocalSearch({
+                                                        ...localSearch,
+                                                        [block.title]: e.target.value
+                                                    })}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-3 text-sm text-gray-700 mt-2">
+                                            {/* MAP FILTERED OPTIONS INSTEAD OF BLOCK.OPTIONS */}
+                                            {filteredOptions.length > 0 ? (
+                                                filteredOptions.map((opt) => (
+                                                    <label key={opt} className="flex items-center cursor-pointer hover:text-indigo-600 transition-colors">
+                                                        <input
+                                                            type="checkbox"
+                                                            className="mr-3 accent-indigo-600 h-4 w-4"
+                                                            checked={searchParams.get(block.key) === opt}
+                                                            onChange={() => updateFilter(block.key, opt)}
+                                                        />
+                                                        <span className={searchParams.get(block.key) === opt ? "text-indigo-600 font-bold" : ""}>
+                                                            {opt}
+                                                        </span>
+                                                    </label>
+                                                ))
+                                            ) : (
+                                                <p className="text-gray-400 text-xs italic py-2">No matches found</p>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             );
@@ -271,8 +272,8 @@ export default function CollegeListClient({
 
                 {/* Results Section */}
                 <section className="w-full lg:w-3/4">
-                    <div className="flex justify-between items-center mb-6">
-                        <h3 className="font-bold text-lg text-gray-800">
+                    <div className="@max-xs:flex-1 sm:flex md:flex lg:flex justify-between items-center mb-6">
+                        <h3 className="font-bold text-lg text-gray-800 mb-2">
                             Showing {initialColleges.length} Colleges
                         </h3>
                         <select
@@ -295,11 +296,11 @@ export default function CollegeListClient({
                         </div>
                     ) : (
                         initialColleges.map((college) => (
-                            <div key={college.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 md:p-4 mb-6 flex flex-col lg:flex-row gap-3 md:gap-6">
+                            <div key={college.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 md:p-4 mb-6 flex flex-col md:flex-row lg:flex-row gap-3 md:gap-6">
 
                                 {/* Left Side: Image Gallery Section */}
-                                <div className="relative w-full lg:w-75 shrink-0">
-                                    <div className="relative h-54 min-h-[80%] rounded-xl overflow-hidden mb-3 bg-gray-200">
+                                <div className="relative mx-auto w-full sm:w-[60%] md:w-75 lg:w-75 shrink-0">
+                                    <div className="relative h-64 min-h-[80%] rounded-xl overflow-hidden mb-3 bg-gray-200">
                                         {/* <img
                                         src={college.banner_url || "https://via.placeholder.com/400x300"}
                                         className="w-full h-full object-cover"
@@ -326,7 +327,7 @@ export default function CollegeListClient({
                                 </div>
 
                                 {/* Right Side: Content Section */}
-                                <div className="flex-1 bg-white rounded-2xl p-0 md:p-0">
+                                <div className="relative flex-1 bg-white rounded-2xl p-0 md:p-0">
                                     {/* Logo and Tags - Hidden tags on very small mobile to match your HTML version */}
                                     <div className="flex justify-between items-center gap-3 mb-2">
                                         <div className="relative w-10 h-10 md:w-15 md:h-15 rounded-full shadow-sm bg-gray-200 flex items-center justify-center text-[10px] md:text-xs">
@@ -344,7 +345,7 @@ export default function CollegeListClient({
                                     </div>
 
                                     {/* Title */}
-                                    <h3 className="text-lg md:text-2xl font-medium text-[#0F172A] mb-1">
+                                    <h3 className="flex-1 text-lg md:text-2xl font-medium text-[#0F172A] mb-1">
                                         {college.name}
                                     </h3>
 
@@ -361,7 +362,7 @@ export default function CollegeListClient({
                                     </div>
 
                                     {/* Badges */}
-                                    <div className="flex gap-2 md:gap-3 mb-1 md:mb-2">
+                                    <div className="flex gap-2 md:gap-3 mb-2 md:mb-2">
                                         <span className="bg-[#E8EFFF] text-[#2D5BFF] px-3 md:px-3 py-1 md:py-1.5 rounded-full text-xs md:text-xs font-medium border border-[#2D5BFF]/10">
                                             NAAC {college.naac_grade || 'A++'}
                                         </span>
@@ -371,18 +372,18 @@ export default function CollegeListClient({
                                     </div>
 
                                     {/* Info Grid */}
-                                    <div className="flex gap-1 md:gap-6 mb-4 md:mb-3 ">
+                                    <div className="flex flex-wrap gap-1 md:gap-3 mb-4 md:mb-3">
                                         <div className="flex items-center gap-2 text-gray-500">
-                                        <MapPin className='w-4 h-4 text-blue-300' />
+                                            <MapPin className='w-4 h-4 text-blue-300' />
                                             <span className="text-xs md:text-sm md:font-medium">{college.city || 'Tamil Nadu'}</span>
                                         </div>
                                         <div className="flex items-center gap-2 text-gray-500">
-                                        <Globe className='w-4 h-4 text-blue-300' />
+                                            <Globe className='w-4 h-4 text-blue-300' />
                                             <span className="text-xs md:text-sm md:font-medium">{college.website}</span>
                                         </div>
                                         <div className="flex items-center gap-2 text-gray-500">
-                                        <Mail className='w-4 h-4 text-blue-300' />
-                                            <span className="text-xs md:text-sm md:font-medium">{college.email || college.slug }</span>
+                                            <Mail className='w-4 h-4 text-blue-300' />
+                                            <span className="text-xs md:text-sm md:font-medium">{college.email || college.slug}</span>
                                         </div>
                                     </div>
 
@@ -431,8 +432,8 @@ export default function CollegeListClient({
                 </section>
             </main>
             <Footer />
-            <EnquiryFormModal 
-                isOpen={isModalOpen} 
+            <EnquiryFormModal
+                isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 sourcePage="College Listing"
                 hiddenFields={hiddenFields}
