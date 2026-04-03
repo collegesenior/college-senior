@@ -124,7 +124,7 @@ export default function CollegeListClient({
             )}
 
             {/* Hero Section */}
-            <section className="max-w-375 mx-auto bg-linear-to-tr from-blue-500 to-indigo-600 m-3 md:rounded-2xl lg:rounded-2xl text-white pt-4 pb-4 px-4 relative overflow-hidden">
+            <section className="max-w-375 mx-auto bg-linear-to-tr from-blue-500 to-indigo-600 lg:m-3 md:m-3 md:rounded-2xl lg:rounded-2xl text-white pt-4 pb-4 px-4 relative overflow-hidden">
                 <div className="max-w-10xl p-3 mx-auto">
                     <div className="z-10 w-full lg:w-2/3">
                         <p className="text-sm opacity-80 mb-10">Home / Colleges</p>
