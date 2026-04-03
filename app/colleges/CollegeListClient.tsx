@@ -149,7 +149,7 @@ export default function CollegeListClient({
             </section>
 
             {/* Mobile Toggle Button */}
-            <div className="lg:hidden px-8 mb-2 flex justify-end">
+            <div className="lg:hidden px-8 my-2 flex justify-end">
                 <button
                     onClick={() => setIsFilterOpen(true)}
                     className="w-50 flex items-center justify-center gap-2 bg-blue-600 text-white py-3 rounded-xl font-bold shadow-md"
