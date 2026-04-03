@@ -42,7 +42,7 @@ export default function Header() {
 
   return (
     <header
-      className={`max-w-387 mx-auto sticky top-0 z-40 ${isHomePage ? 'bg-[#0d68f2]' : 'bg-[#FFF5EE]'
+      className={`max-w-387 mx-auto sticky top-0 z-40 ${isHomePage ? 'bg-[#0d68f2]' : 'bg-[#FFFFFF]'
         }`}
     >
       <div className="flex items-center justify-between px-4 lg:px-12 py-4 max-w-400 mx-auto">
