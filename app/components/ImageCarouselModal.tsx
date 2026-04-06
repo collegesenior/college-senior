@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
-import { extractImagesFromJsonb } from '@/lib/imageUtils';
+import { extractImagesFromJsonb } from '../lib/imageUtils';
 
 interface ImageCarouselModalProps {
   isOpen: boolean;
