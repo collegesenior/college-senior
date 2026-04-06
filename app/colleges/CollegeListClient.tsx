@@ -479,6 +479,7 @@ const extractImagesFromJsonb = (images: any): string[] => {
                                     </div>
                                 </div>
                             </div>
+                              )
                         ))
                     )}
                 </section>
