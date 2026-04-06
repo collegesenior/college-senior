@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
-import { extractImagesFromJsonb } from '../lib/imageUtils';
+
 
 interface ImageCarouselModalProps {
   isOpen: boolean;
@@ -19,6 +19,25 @@ export default function ImageCarouselModal({
   collegeName,
   initialIndex = 0
 }: ImageCarouselModalProps) {
+
+  // Helper to safely extract image URLs from JSON or array
+const extractImagesFromJsonb = (images: any): string[] => {
+  if (!images) return [];
+
+  // If already an array, return it
+  if (Array.isArray(images)) return images;
+
+  try {
+    // If JSON string, parse it
+    const parsed = typeof images === 'string' ? JSON.parse(images) : images;
+
+    // Ensure parsed value is an array
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    // If parsing fails, return empty array
+    return [];
+  }
+};
 
   const imageUrls = (extractImagesFromJsonb(images) || []).filter(
     (url: string) => url && url.trim() !== ""
