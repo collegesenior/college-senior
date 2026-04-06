@@ -22,19 +22,35 @@ export default function ImageCarouselModal({
 
   // Helper to safely extract image URLs from JSON or array
 const extractImagesFromJsonb = (images: any): string[] => {
-  if (!images) return [];
-
-  // If already an array, return it
-  if (Array.isArray(images)) return images;
-
   try {
-    // If JSON string, parse it
-    const parsed = typeof images === 'string' ? JSON.parse(images) : images;
-
-    // Ensure parsed value is an array
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    // If parsing fails, return empty array
+    if (!images) return [];
+    
+    // If it's already an array of strings
+    if (Array.isArray(images) && images.every(item => typeof item === 'string')) {
+      return images;
+    }
+    
+    // If it's an array of objects like [{"image1":"url"},{"image2":"url"}]
+    if (Array.isArray(images)) {
+      return images.map((item: any) => {
+        if (typeof item === 'string') return item;
+        if (typeof item === 'object' && item !== null) {
+          const key = Object.keys(item)[0];
+          return item[key];
+        }
+        return '';
+      }).filter(Boolean);
+    }
+    
+    // If it's a string, try to parse it
+    if (typeof images === 'string') {
+      const parsed = JSON.parse(images);
+      return extractImagesFromJsonb(parsed);
+    }
+    
+    return [];
+  } catch (error) {
+    console.error('Error extracting images:', error);
     return [];
   }
 };
