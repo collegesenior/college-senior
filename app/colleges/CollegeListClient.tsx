@@ -2,7 +2,7 @@
 import { useState, useTransition, useEffect } from 'react';
 import Headers from '../components/Header';
 import Footer from '../components/Footer';
-import { getMainImage, getThumbnailImages } from '../lib/imageUtils';
+
 type CollegeType = {
     id: number;
     name: string;
@@ -67,6 +67,19 @@ export default function CollegeListClient({
         searchQuery: currentParams.search || '',
         sortBy: currentParams.sort || 'ranking'
     };
+    // Safe image extractor
+const extractImagesFromJsonb = (images: any): string[] => {
+  if (!images) return [];
+  if (Array.isArray(images)) return images;
+
+  try {
+    const parsed = typeof images === 'string' ? JSON.parse(images) : images;
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+};
+    const validImages = extractImagesFromJsonb(college.image_urls);
 
     // Function to open carousel modal
     const openCarousel = (images: any, collegeName: string, initialIndex: number = 0) => {
@@ -319,7 +332,7 @@ export default function CollegeListClient({
                                         onClick={() => openCarousel(college.image_urls, college.name, 0)}
                                     >
                                         <img
-                                            src={getMainImage(college.image_urls)}
+                                            src={getMainImage(validImages)}
                                             className="w-full h-full object-cover "
                                             alt={college.name}
                                         />
@@ -336,7 +349,7 @@ export default function CollegeListClient({
 
                                     {/* Thumbnails */}
                                     <div className="grid grid-cols-4 gap-2 min-h-[20%]">
-                                        {getThumbnailImages(college.image_urls, 3).map((imageUrl: string, i: number) => (
+                                        {getThumbnailImages(validImages, 3).map((imageUrl: string, i: number) => (
                                             <div
                                                 key={i}
                                                 className="h-15 rounded-lg overflow-hidden  cursor-pointer"
@@ -346,7 +359,7 @@ export default function CollegeListClient({
                                             </div>
                                         ))}
                                         {/* Fill remaining slots with placeholder if needed */}
-                                        {Array.from({ length: Math.max(0, 2 - getThumbnailImages(college.image_urls, 3).length) }).map((_, i) => (
+                                        {Array.from({ length: Math.max(0, 2 - getThumbnailImages(validImages, 3).length) }).map((_, i) => (
                                             <div key={`placeholder-${i}`} className="h-15 rounded-lg overflow-hidden bg-gray-200 hover:bg-gray-300">
                                                 <img src="https://via.placeholder.com/400x300" className="w-full h-full object-cover opacity-80" alt="placeholder" />
                                             </div>
