@@ -5,14 +5,14 @@ const Footer = () => {
         <>
             <footer className='max-w-378 mx-auto bg-gray-100 pt-36 md:pt-40 sm:pt-52'>
                     <div className='bg-[#001c54] relative h-220 sm:pt-5 pt-4'>
-                        <div className='max-w-full absolute md:absolute -top-50 left-0 right-0 sm:absolute sm:m-5 m-5 md:m-25'>
-                            <div className=" bg-[#F4F7FF] rounded-t-3xl p-5 md:p-7 lg:p-7">
+                        <div className='max-w-full absolute md:absolute -top-45 left-0 right-0 sm:absolute sm:m-5 mx-3 my-8 md:m-10 md:-top-70'>
+                            <div className=" bg-[#F4F7FF] rounded-t-xl p-5 md:p-7 lg:p-7">
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
 
                                     {/* Left Column: Branding */}
                                     <div className="space-y-2 md:space-y-6">
                                         <h2 className="text-2xl md:text-4xl font-bold">
-                                            Let’s Connect
+                                            Let's Connect
                                         </h2>
                                         <div className="space-y-1 md:space-y-2">
                                             <p className="text-blue-500 tracking-wider text-sm">
@@ -73,7 +73,7 @@ const Footer = () => {
                             </div>
 
                             {/* Floating Contact Bar (Blue Bar) */}
-                            <div className="bg-[#0d68f2] rounded-b-3xl relative z-20 py-3 px-8 md:px-12 flex flex-col md:flex-row items-center justify-end space-x-7  text-white space-y-4 md:space-y-2">
+                            <div className="bg-[#0d68f2] rounded-b-xl relative z-20 py-3 px-8 md:px-12 flex flex-col md:flex-row items-center justify-end space-x-7  text-white space-y-4 md:space-y-2">
                                 <p >
                                     Give us a call on or mail us at
                                 </p>
