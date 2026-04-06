@@ -2,6 +2,7 @@
 import { useState, useTransition, useEffect } from 'react';
 import Headers from '../components/Header';
 import Footer from '../components/Footer';
+import { getMainImage, getThumbnailImages } from '@/lib/imageUtils';
 type CollegeType = {
     id: number;
     name: string;
@@ -17,7 +18,7 @@ type CollegeType = {
     email: string;
     phone: string;
     logo_url: string;
-    image_url: string;
+    image_urls: Array<{ [key: string]: string }> | null; // Updated to reflect JSONB array format
     overview: string;
     description: string;
     meta_title: string;
@@ -29,6 +30,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Search, Loader2, MapPin, Mail, Globe, Settings2 } from 'lucide-react';
 import Image from 'next/image';
 import EnquiryFormModal from '../components/EnquiryFormModal';
+import ImageCarouselModal from '../components/ImageCarouselModal';
 import { useScrollTrigger } from '../hooks/useScrollTrigger';
 
 interface Props {
@@ -47,6 +49,10 @@ export default function CollegeListClient({
     const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
     const [localSearch, setLocalSearch] = useState<Record<string, string>>({});
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isCarouselOpen, setIsCarouselOpen] = useState(false);
+    const [selectedCollegeImages, setSelectedCollegeImages] = useState<any>(null);
+    const [selectedCollegeName, setSelectedCollegeName] = useState('');
+    const [carouselInitialIndex, setCarouselInitialIndex] = useState(0);
     const { isTriggered } = useScrollTrigger(0.7);
 
     useEffect(() => {
@@ -61,6 +67,20 @@ export default function CollegeListClient({
         searchQuery: currentParams.search || '',
         sortBy: currentParams.sort || 'ranking'
     };
+
+    // Function to open carousel modal
+    const openCarousel = (images: any, collegeName: string, initialIndex: number = 0) => {
+        if (!images || images.length === 0) {
+            alert("No images available for that particular college");
+            return;
+        }
+        setSelectedCollegeImages(images);
+        setSelectedCollegeName(collegeName);
+        setCarouselInitialIndex(initialIndex);
+        setIsCarouselOpen(true);
+    };
+
+
 
     // 1. Updated updateFilter with Transition
     const updateFilter = (key: string, value: string) => {
@@ -124,35 +144,31 @@ export default function CollegeListClient({
             )}
 
             {/* Hero Section */}
-            <section className="max-w-375 mx-auto bg-linear-to-tr from-blue-500 to-indigo-600 lg:m-3 md:m-3 md:rounded-2xl lg:rounded-2xl text-white pt-4 pb-4 px-4 relative overflow-hidden">
+            <section className="max-w-375 mx-auto bg-linear-to-tr from-blue-500 to-indigo-600 md:rounded-2xl lg:rounded-2xl text-white pt-4 pb-4 px-4 relative overflow-hidden">
                 <div className="max-w-10xl p-3 mx-auto">
-                    <div className="z-10 w-full lg:w-2/3">
-                        <p className="text-sm opacity-80 mb-10">Home / Colleges</p>
-                        <h2 className="text-2xl md:text-4xl font-bold">Find Your Perfect Colleges</h2>
-                        <p className="text-md md:text-lg opacity-90 mb-4">
-                            Explore hundreds of colleges to find the right one for you.
-                        </p>
+                    <div className="z-50 w-full lg:w-2/3 md:w-2/3">
+                        <p className="text-sm opacity-80 mb-15 md:mb-15 lg:mb-20">Home / Colleges</p>
+                        <h2 className="text-2xl md:text-3xl flex font-semibold">Find Your Perfect Colleges</h2>
+                        <p className="text-md md:text-lg opacity-90 mb-4"> Explore hundreds of colleges to find the right one for you. </p>
                         <form onSubmit={handleSearchSubmit} className="w-full mt-4 flex bg-white p-1 md:p-2 rounded-lg shadow-lg border border-gray-200 text-gray-800">
                             <button type="submit" className="p-2 text-blue-700 hover:text-blue-600 transition">
                                 <Search size={20} />
                             </button>
-                            <input
-                                type="text"
-                                placeholder="Search for colleges..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="grow p-2 outline-none placeholder-blue-700"
-                            />
+                            <input type="text" placeholder="Search for colleges..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+                                className="grow p-2 outline-none placeholder-blue-700" />
                         </form>
+                    </div>
+                    <div className='w-full lg:w-1/3 md:w-1/3 z-0'>
+                        <Image src="/collegehero.png" alt="Hero" width={320} height={320} className="absolute right-0 bottom-0 z-0 hidden lg:block" />
                     </div>
                 </div>
             </section>
 
             {/* Mobile Toggle Button */}
-            <div className="lg:hidden px-8 my-2 flex justify-end">
+            <div className="lg:hidden px-8 my-2">
                 <button
                     onClick={() => setIsFilterOpen(true)}
-                    className="w-50 flex items-center justify-center gap-2 bg-blue-600 text-white py-3 rounded-xl font-bold shadow-md"
+                    className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-3 rounded-xl font-bold shadow-md"
                 >
                     <Settings2 />
                     Filter Options
@@ -170,7 +186,7 @@ export default function CollegeListClient({
                 )}
 
                 {/* Filters Sidebar */}
-                <aside className={`fixed sm:fixed md:fixed inset-0 z-40  lg:sticky lg:top-25 lg:z-10 w-80 lg:h-200 sm:h-auto bg-gray-50 p-3 overflow-y-scroll transition-transform duration-300 lg:translate-x-0 lg:w-1/4 lg:block lg:bg-transparent lg:p-0
+                <aside className={`fixed sm:fixed md:fixed inset-0 z-40  lg:relative lg:z-10 w-80 lg:h-auto sm:h-auto bg-gray-50 p-3 overflow-y-scroll transition-transform duration-300 lg:translate-x-0 lg:w-1/4 lg:block lg:bg-transparent lg:p-0
           ${isFilterOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} `} style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                     <div className="flex justify-between items-center mb-6 lg:mb-2 p-2">
                         <h3 className="font-bold text-lg">Filters</h3>
@@ -195,7 +211,7 @@ export default function CollegeListClient({
                             {
                                 title: "Degree",
                                 key: "degree",
-                                options: ["B.Tech. (Bachelor of Technology)", "M.Tech. (Master of Technology)", "B.E. ( Bachelor of Engineering)", "MBA ( Master of Business Administration)", "BBA ( Bachelor of Business Administration)", "BCA ( Bachelor of Computer Applications)", "B.Sc. ( Bachelor of Science)", "M.Sc. ( Master of Science)", "B.Com. ( Bachelor of Commerce)", "M.Com. ( Master of Commerce)", "B.Arch. ( Bachelor of Architecture)", "M.Arch. ( Master of Architecture)", "Ph.D. (Doctor of Philosophy)", "M.D.S. ( Master of Dental Surgery)", "B.Pharm. ( Bachelor of Pharmacy)", "M.B.B.S. ( Bachelor of Medicine and Bachelor of Surgery)", "M.Pharm. ( Master of Pharmacy)", "B.H.M. ( Bachelor of Hotel Management)"],
+                                options: ["B.Tech. ( Bachelor of Technology)", "M.Tech. ( Master of Technology)", "B.E. ( Bachelor of Engineering)", "MBA ( Master of Business Administration)", "BBA ( Bachelor of Business Administration)", "BCA ( Bachelor of Computer Applications)", "B.Sc. ( Bachelor of Science)", "M.Sc. ( Master of Science)", "B.Com. ( Bachelor of Commerce)", "M.Com. ( Master of Commerce)", "B.Arch. ( Bachelor of Architecture)", "M.Arch. ( Master of Architecture)", "Ph.D. (Doctor of Philosophy)", "M.D.S. ( Master of Dental Surgery)", "B.Pharm. ( Bachelor of Pharmacy)", "M.B.B.S. ( Bachelor of Medicine and Bachelor of Surgery)", "M.Pharm. ( Master of Pharmacy)", "B.H.M. ( Bachelor of Hotel Management)"],
                             },
                             {
                                 title: "Cities",
@@ -210,9 +226,8 @@ export default function CollegeListClient({
                             );
 
                             return (
-                                <div className='bg-white p-1 rounded-xl shadow-sm'>
-
-                                    <div key={block.title} className="bg-white h-70 pt-0 p-3 rounded-xl overflow-y-scroll lg:border-none" style={{ scrollbarWidth: 'thin', msOverflowStyle: 'none', borderRadius: '19px' }}>
+                                <div key={block.title} className='bg-white p-1 rounded-xl shadow-sm'>
+                                    <div className="bg-white h-70 pt-0 p-3 rounded-xl overflow-y-scroll lg:border-none" style={{ scrollbarWidth: 'thin', msOverflowStyle: 'none', borderRadius: '19px' }}>
                                         <div className='bg-white sticky top-0 py-5'>
                                             <h4 className="font-bold">{block.title}</h4>
                                             <div className="flex items-center gap-2 mt-2 border-b border-gray-100">
@@ -296,31 +311,50 @@ export default function CollegeListClient({
                         </div>
                     ) : (
                         initialColleges.map((college) => (
-                            <div key={college.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 md:p-4 mb-6 flex flex-col md:flex-row lg:flex-row gap-3 md:gap-6">
-
+                            <div key={college.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 md:p-4 mb-3 flex flex-col md:flex-row lg:flex-row gap-2 md:gap-6">
                                 {/* Left Side: Image Gallery Section */}
                                 <div className="relative mx-auto w-full sm:w-[60%] md:w-75 lg:w-75 shrink-0">
-                                    <div className="relative h-64 min-h-[80%] rounded-xl overflow-hidden mb-3 bg-gray-200">
-                                        {/* <img
-                                        src={college.banner_url || "https://via.placeholder.com/400x300"}
-                                        className="w-full h-full object-cover"
-                                        alt={college.name}
-                                    /> */}
+                                    <div
+                                        className="relative h-64 min-h-[80%] flex items-center rounded-xl overflow-hidden mb-3 bg-gray-200 cursor-pointer"
+                                        onClick={() => openCarousel(college.image_urls, college.name, 0)}
+                                    >
+                                        <img
+                                            src={getMainImage(college.image_urls)}
+                                            className="w-full h-full object-cover "
+                                            alt={college.name}
+                                        />
                                         <div className="absolute bottom-0 left-0 right-0 p-4 bg-linear-to-t from-black/60 to-transparent">
                                             <h4 className="text-white font-bold text-sm leading-tight">
                                                 {college.name}
                                             </h4>
                                         </div>
+                                        {/* View Gallery Overlay */}
+                                        <div className="absolute inset-0  bg-opacity-0 hover:bg-opacity-90 transition-all flex items-center justify-center">
+
+                                        </div>
                                     </div>
 
                                     {/* Thumbnails */}
                                     <div className="grid grid-cols-4 gap-2 min-h-[20%]">
-                                        {[1, 2, 3].map((i) => (
-                                            <div key={i} className="h-15 rounded-lg overflow-hidden bg-gray-200 ">
-                                                {/* <img src={college.banner_url || ""} className="w-full h-full object-cover opacity-80" alt="thumb" /> */}
+                                        {getThumbnailImages(college.image_urls, 3).map((imageUrl: string, i: number) => (
+                                            <div
+                                                key={i}
+                                                className="h-15 rounded-lg overflow-hidden  cursor-pointer"
+                                                onClick={() => openCarousel(college.image_urls, college.name, i + 1)}
+                                            >
+                                                <img src={imageUrl} className="w-full h-full object-cover opacity-80" alt={`thumb-${i}`} />
                                             </div>
                                         ))}
-                                        <div className="h-15 rounded-lg bg-gray-200 flex items-center justify-center text-gray-600 text-xs font-bold cursor-pointer">
+                                        {/* Fill remaining slots with placeholder if needed */}
+                                        {Array.from({ length: Math.max(0, 2 - getThumbnailImages(college.image_urls, 3).length) }).map((_, i) => (
+                                            <div key={`placeholder-${i}`} className="h-15 rounded-lg overflow-hidden bg-gray-200 hover:bg-gray-300">
+                                                <img src="https://via.placeholder.com/400x300" className="w-full h-full object-cover opacity-80" alt="placeholder" />
+                                            </div>
+                                        ))}
+                                        <div
+                                            className="h-15 rounded-lg bg-gray-200 flex items-center justify-center text-gray-600 text-xs font-bold cursor-pointer hover:bg-gray-300 transition-colors"
+                                            onClick={() => openCarousel(college.image_urls, college.name, 0)}
+                                        >
                                             +more
                                         </div>
                                     </div>
@@ -415,7 +449,9 @@ export default function CollegeListClient({
                                             <button className="flex-1 sm:flex-none border-2 border-[#2D5BFF] text-[#2D5BFF] font-bold px-4 md:px-6 py-2 rounded-lg hover:bg-blue-50 transition-colors text-xs md:text-sm">
                                                 Apply now
                                             </button>
-                                            <a href={`/colleges/${college.slug}`} className="flex-1 sm:flex-none bg-[#4F46E5] text-white font-bold px-4 md:px-6 py-2 rounded-lg shadow-md hover:bg-[#4338CA] transition-colors text-xs md:text-sm">View More</a>
+                                            <button className="flex-1 sm:flex-none bg-[#4F46E5] text-white font-bold px-4 md:px-6 py-2 rounded-lg shadow-md hover:bg-[#4338CA] transition-colors justify-center text-xs md:text-sm">
+                                                <a href={`/colleges/${college.slug}`} >View More</a>
+                                            </button>
                                             {/* <Link
                                                 href={`/colleges/${college.slug}`}
                                                 >
@@ -437,6 +473,13 @@ export default function CollegeListClient({
                 onClose={() => setIsModalOpen(false)}
                 sourcePage="College Listing"
                 hiddenFields={hiddenFields}
+            />
+            <ImageCarouselModal
+                isOpen={isCarouselOpen}
+                onClose={() => setIsCarouselOpen(false)}
+                images={selectedCollegeImages}
+                collegeName={selectedCollegeName}
+                initialIndex={carouselInitialIndex}
             />
         </div>
     );
