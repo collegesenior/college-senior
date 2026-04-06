@@ -2,7 +2,7 @@
 import { useState, useTransition, useEffect } from 'react';
 import Headers from '../components/Header';
 import Footer from '../components/Footer';
-import { getMainImage, getThumbnailImages } from '@/lib/imageUtils';
+import { getMainImage, getThumbnailImages } from '../lib/imageUtils';
 type CollegeType = {
     id: number;
     name: string;
