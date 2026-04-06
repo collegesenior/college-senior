@@ -323,8 +323,10 @@ const extractImagesFromJsonb = (images: any): string[] => {
                             </button>
                         </div>
                     ) : (
-                        initialColleges.map((college) => (
-                            const validImages = extractImagesFromJsonb(college.image_urls);
+                        initialColleges.map((college) => {
+                          const validImages = extractImagesFromJsonb(college.image_urls);
+
+                          return (
                             <div key={college.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 md:p-4 mb-3 flex flex-col md:flex-row lg:flex-row gap-2 md:gap-6">
                                 {/* Left Side: Image Gallery Section */}
                                 <div className="relative mx-auto w-full sm:w-[60%] md:w-75 lg:w-75 shrink-0">
