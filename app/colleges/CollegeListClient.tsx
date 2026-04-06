@@ -68,18 +68,18 @@ export default function CollegeListClient({
         sortBy: currentParams.sort || 'ranking'
     };
     // Safe image extractor
-const extractImagesFromJsonb = (images: any): string[] => {
-  if (!images) return [];
-  if (Array.isArray(images)) return images;
+    const extractImagesFromJsonb = (images: any): string[] => {
+        if (!images) return [];
+        if (Array.isArray(images)) return images;
 
-  try {
-    const parsed = typeof images === 'string' ? JSON.parse(images) : images;
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-};
-    
+        try {
+            const parsed = typeof images === 'string' ? JSON.parse(images) : images;
+            return Array.isArray(parsed) ? parsed : [];
+        } catch {
+            return [];
+        }
+    };
+
 
     // Function to open carousel modal
     const openCarousel = (images: any, collegeName: string, initialIndex: number = 0) => {
@@ -324,162 +324,172 @@ const extractImagesFromJsonb = (images: any): string[] => {
                         </div>
                     ) : (
                         initialColleges.map((college) => {
-                          const validImages = extractImagesFromJsonb(college.image_urls);
+                            const validImages = extractImagesFromJsonb(college.image_urls);
+                            // Returns the first image or a placeholder if none
+                            const getMainImage = (images: string[]) => {
+                                return images && images.length > 0 ? images[0] : "https://via.placeholder.com/400x300";
+                            };
 
-                          return (
-                            <div key={college.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 md:p-4 mb-3 flex flex-col md:flex-row lg:flex-row gap-2 md:gap-6">
-                                {/* Left Side: Image Gallery Section */}
-                                <div className="relative mx-auto w-full sm:w-[60%] md:w-75 lg:w-75 shrink-0">
-                                    <div
-                                        className="relative h-64 min-h-[80%] flex items-center rounded-xl overflow-hidden mb-3 bg-gray-200 cursor-pointer"
-                                        onClick={() => openCarousel(college.image_urls, college.name, 0)}
-                                    >
-                                        <img
-                                            src={getMainImage(validImages)}
-                                            className="w-full h-full object-cover "
-                                            alt={college.name}
-                                        />
-                                        <div className="absolute bottom-0 left-0 right-0 p-4 bg-linear-to-t from-black/60 to-transparent">
-                                            <h4 className="text-white font-bold text-sm leading-tight">
-                                                {college.name}
-                                            </h4>
-                                        </div>
-                                        {/* View Gallery Overlay */}
-                                        <div className="absolute inset-0  bg-opacity-0 hover:bg-opacity-90 transition-all flex items-center justify-center">
+                            // Returns all thumbnails, excluding the first one (or first N images)
+                            const getThumbnailImages = (images: string[], count: number) => {
+                                if (!images || images.length <= 1) return [];
+                                return images.slice(1, count + 1);
+                            };
 
-                                        </div>
-                                    </div>
-
-                                    {/* Thumbnails */}
-                                    <div className="grid grid-cols-4 gap-2 min-h-[20%]">
-                                        {getThumbnailImages(validImages, 3).map((imageUrl: string, i: number) => (
-                                            <div
-                                                key={i}
-                                                className="h-15 rounded-lg overflow-hidden  cursor-pointer"
-                                                onClick={() => openCarousel(college.image_urls, college.name, i + 1)}
-                                            >
-                                                <img src={imageUrl} className="w-full h-full object-cover opacity-80" alt={`thumb-${i}`} />
-                                            </div>
-                                        ))}
-                                        {/* Fill remaining slots with placeholder if needed */}
-                                        {Array.from({ length: Math.max(0, 2 - getThumbnailImages(validImages, 3).length) }).map((_, i) => (
-                                            <div key={`placeholder-${i}`} className="h-15 rounded-lg overflow-hidden bg-gray-200 hover:bg-gray-300">
-                                                <img src="https://via.placeholder.com/400x300" className="w-full h-full object-cover opacity-80" alt="placeholder" />
-                                            </div>
-                                        ))}
+                            return (
+                                <div key={college.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 md:p-4 mb-3 flex flex-col md:flex-row lg:flex-row gap-2 md:gap-6">
+                                    {/* Left Side: Image Gallery Section */}
+                                    <div className="relative mx-auto w-full sm:w-[60%] md:w-75 lg:w-75 shrink-0">
                                         <div
-                                            className="h-15 rounded-lg bg-gray-200 flex items-center justify-center text-gray-600 text-xs font-bold cursor-pointer hover:bg-gray-300 transition-colors"
+                                            className="relative h-64 min-h-[80%] flex items-center rounded-xl overflow-hidden mb-3 bg-gray-200 cursor-pointer"
                                             onClick={() => openCarousel(college.image_urls, college.name, 0)}
                                         >
-                                            +more
-                                        </div>
-                                    </div>
-                                </div>
+                                            <img
+                                                src={getMainImage(validImages)}
+                                                className="w-full h-full object-cover "
+                                                alt={college.name}
+                                            />
+                                            <div className="absolute bottom-0 left-0 right-0 p-4 bg-linear-to-t from-black/60 to-transparent">
+                                                <h4 className="text-white font-bold text-sm leading-tight">
+                                                    {college.name}
+                                                </h4>
+                                            </div>
+                                            {/* View Gallery Overlay */}
+                                            <div className="absolute inset-0  bg-opacity-0 hover:bg-opacity-90 transition-all flex items-center justify-center">
 
-                                {/* Right Side: Content Section */}
-                                <div className="relative flex-1 bg-white rounded-2xl p-0 md:p-0">
-                                    {/* Logo and Tags - Hidden tags on very small mobile to match your HTML version */}
-                                    <div className="flex justify-between items-center gap-3 mb-2">
-                                        <div className="relative w-10 h-10 md:w-15 md:h-15 rounded-full shadow-sm bg-gray-200 flex items-center justify-center text-[10px] md:text-xs">
-                                            <Image src={college.logo_url || "/placeholder-logo.svg"} width={60} height={60} alt="Logo" className='rounded-full' />
-                                        </div>
-
-                                        <div className="hidden sm:flex gap-2">
-                                            <span className="bg-[#FFF3EC] text-[#D97706] px-2 md:px-3 py-1 rounded-md text-[10px] md:text-xs font-bold uppercase">
-                                                {college.ownership || 'Private'}
-                                            </span>
-                                            <span className="bg-[#E8F5E9] text-[#2E7D32] px-2 md:px-3 py-1 rounded-md text-[10px] md:text-xs font-bold uppercase">
-                                                Multiple Programs Offered
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    {/* Title */}
-                                    <h3 className="flex-1 text-lg md:text-2xl font-medium text-[#0F172A] mb-1">
-                                        {college.name}
-                                    </h3>
-
-                                    <div className="flex flex-col md:flex-row md:items-center justify-between mb-1 md:mb-3 gap-2">
-                                        <p className="text-gray-500 font-medium text-sm md:text-base">
-                                            {college.city}
-                                        </p>
-
-                                        <div className="flex items-center gap-1">
-                                            <span className="text-yellow-400">★</span>
-                                            <span className="font-bold text-sm md:text-base">4.9</span>
-                                            <span className="text-gray-400 text-xs md:text-sm">(1k reviews)</span>
-                                        </div>
-                                    </div>
-
-                                    {/* Badges */}
-                                    <div className="flex gap-2 md:gap-3 mb-2 md:mb-2">
-                                        <span className="bg-[#E8EFFF] text-[#2D5BFF] px-3 md:px-3 py-1 md:py-1.5 rounded-full text-xs md:text-xs font-medium border border-[#2D5BFF]/10">
-                                            NAAC {college.naac_grade || 'A++'}
-                                        </span>
-                                        <span className="bg-[#E7F9EE] text-[#059669] px-3 md:px-4 py-1 md:py-1.5 rounded-full text-xs md:text-xs font-medium border border-[#059669]/10">
-                                            #{college.nirf_ranking} NIRF 2023
-                                        </span>
-                                    </div>
-
-                                    {/* Info Grid */}
-                                    <div className="flex flex-wrap gap-1 md:gap-3 mb-4 md:mb-3">
-                                        <div className="flex items-center gap-2 text-gray-500">
-                                            <MapPin className='w-4 h-4 text-blue-300' />
-                                            <span className="text-xs md:text-sm md:font-medium">{college.city || 'Tamil Nadu'}</span>
-                                        </div>
-                                        <div className="flex items-center gap-2 text-gray-500">
-                                            <Globe className='w-4 h-4 text-blue-300' />
-                                            <span className="text-xs md:text-sm md:font-medium">{college.website}</span>
-                                        </div>
-                                        <div className="flex items-center gap-2 text-gray-500">
-                                            <Mail className='w-4 h-4 text-blue-300' />
-                                            <span className="text-xs md:text-sm md:font-medium">{college.email || college.slug}</span>
-                                        </div>
-                                    </div>
-
-                                    {/* Description */}
-                                    <p className="max-h-30 text-gray-600 text-xs md:text-sm mb-4 md:mb-3 overflow-y-scroll" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                                        {college.description || "An MBA in Marketing is a postgraduate degree focusing on marketing strategies, brand management, and consumer behavior, equipping students with skills for roles like Brand Manager, Sales Manager, or Market Research Analyst..."}
-                                    </p>
-                                    <hr className="mb-4 md:mb-6 opacity-50" />
-                                    <p className="text-[10px] md:text-xs text-gray-400 mb-4 font-medium">
-                                        Know more about{' '}
-                                        <span className="text-[#2D5BFF] cursor-pointer">
-                                            Courses & Fees, Admissions, Placements, Facilities, Reviews
-                                        </span>
-                                    </p>
-
-                                    {/* Footer Buttons */}
-                                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                                        <div>
-                                            <p className="text-xs font-bold text-[#2D5BFF] mb-2 uppercase">Top Courses</p>
-                                            <div className="flex -space-x-2">
-                                                <div className="w-8 h-8 rounded-full border-2 border-white bg-red-400"></div>
-                                                <div className="w-8 h-8 rounded-full border-2 border-white bg-blue-400"></div>
-                                                <div className="w-8 h-8 rounded-full border-2 border-white bg-purple-400"></div>
-                                                <div className="w-8 h-8 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center text-[10px] font-bold">+2</div>
                                             </div>
                                         </div>
 
-                                        <div className="flex gap-2 w-full sm:w-auto">
-                                            <button className="flex-1 sm:flex-none border-2 border-[#2D5BFF] text-[#2D5BFF] font-bold px-4 md:px-6 py-2 rounded-lg hover:bg-blue-50 transition-colors text-xs md:text-sm">
-                                                Apply now
-                                            </button>
-                                            <button className="flex-1 sm:flex-none bg-[#4F46E5] text-white font-bold px-4 md:px-6 py-2 rounded-lg shadow-md hover:bg-[#4338CA] transition-colors justify-center text-xs md:text-sm">
-                                                <a href={`/colleges/${college.slug}`} >View More</a>
-                                            </button>
-                                            {/* <Link
+                                        {/* Thumbnails */}
+                                        <div className="grid grid-cols-4 gap-2 min-h-[20%]">
+                                            {getThumbnailImages(validImages, 3).map((imageUrl: string, i: number) => (
+                                                <div
+                                                    key={i}
+                                                    className="h-15 rounded-lg overflow-hidden  cursor-pointer"
+                                                    onClick={() => openCarousel(college.image_urls, college.name, i + 1)}
+                                                >
+                                                    <img src={imageUrl} className="w-full h-full object-cover opacity-80" alt={`thumb-${i}`} />
+                                                </div>
+                                            ))}
+                                            {/* Fill remaining slots with placeholder if needed */}
+                                            {Array.from({ length: Math.max(0, 2 - getThumbnailImages(validImages, 3).length) }).map((_, i) => (
+                                                <div key={`placeholder-${i}`} className="h-15 rounded-lg overflow-hidden bg-gray-200 hover:bg-gray-300">
+                                                    <img src="https://via.placeholder.com/400x300" className="w-full h-full object-cover opacity-80" alt="placeholder" />
+                                                </div>
+                                            ))}
+                                            <div
+                                                className="h-15 rounded-lg bg-gray-200 flex items-center justify-center text-gray-600 text-xs font-bold cursor-pointer hover:bg-gray-300 transition-colors"
+                                                onClick={() => openCarousel(college.image_urls, college.name, 0)}
+                                            >
+                                                +more
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Right Side: Content Section */}
+                                    <div className="relative flex-1 bg-white rounded-2xl p-0 md:p-0">
+                                        {/* Logo and Tags - Hidden tags on very small mobile to match your HTML version */}
+                                        <div className="flex justify-between items-center gap-3 mb-2">
+                                            <div className="relative w-10 h-10 md:w-15 md:h-15 rounded-full shadow-sm bg-gray-200 flex items-center justify-center text-[10px] md:text-xs">
+                                                <Image src={college.logo_url || "/placeholder-logo.svg"} width={60} height={60} alt="Logo" className='rounded-full' />
+                                            </div>
+
+                                            <div className="hidden sm:flex gap-2">
+                                                <span className="bg-[#FFF3EC] text-[#D97706] px-2 md:px-3 py-1 rounded-md text-[10px] md:text-xs font-bold uppercase">
+                                                    {college.ownership || 'Private'}
+                                                </span>
+                                                <span className="bg-[#E8F5E9] text-[#2E7D32] px-2 md:px-3 py-1 rounded-md text-[10px] md:text-xs font-bold uppercase">
+                                                    Multiple Programs Offered
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        {/* Title */}
+                                        <h3 className="flex-1 text-lg md:text-2xl font-medium text-[#0F172A] mb-1">
+                                            {college.name}
+                                        </h3>
+
+                                        <div className="flex flex-col md:flex-row md:items-center justify-between mb-1 md:mb-3 gap-2">
+                                            <p className="text-gray-500 font-medium text-sm md:text-base">
+                                                {college.city}
+                                            </p>
+
+                                            <div className="flex items-center gap-1">
+                                                <span className="text-yellow-400">★</span>
+                                                <span className="font-bold text-sm md:text-base">4.9</span>
+                                                <span className="text-gray-400 text-xs md:text-sm">(1k reviews)</span>
+                                            </div>
+                                        </div>
+
+                                        {/* Badges */}
+                                        <div className="flex gap-2 md:gap-3 mb-2 md:mb-2">
+                                            <span className="bg-[#E8EFFF] text-[#2D5BFF] px-3 md:px-3 py-1 md:py-1.5 rounded-full text-xs md:text-xs font-medium border border-[#2D5BFF]/10">
+                                                NAAC {college.naac_grade || 'A++'}
+                                            </span>
+                                            <span className="bg-[#E7F9EE] text-[#059669] px-3 md:px-4 py-1 md:py-1.5 rounded-full text-xs md:text-xs font-medium border border-[#059669]/10">
+                                                #{college.nirf_ranking} NIRF 2023
+                                            </span>
+                                        </div>
+
+                                        {/* Info Grid */}
+                                        <div className="flex flex-wrap gap-1 md:gap-3 mb-4 md:mb-3">
+                                            <div className="flex items-center gap-2 text-gray-500">
+                                                <MapPin className='w-4 h-4 text-blue-300' />
+                                                <span className="text-xs md:text-sm md:font-medium">{college.city || 'Tamil Nadu'}</span>
+                                            </div>
+                                            <div className="flex items-center gap-2 text-gray-500">
+                                                <Globe className='w-4 h-4 text-blue-300' />
+                                                <span className="text-xs md:text-sm md:font-medium">{college.website}</span>
+                                            </div>
+                                            <div className="flex items-center gap-2 text-gray-500">
+                                                <Mail className='w-4 h-4 text-blue-300' />
+                                                <span className="text-xs md:text-sm md:font-medium">{college.email || college.slug}</span>
+                                            </div>
+                                        </div>
+
+                                        {/* Description */}
+                                        <p className="max-h-30 text-gray-600 text-xs md:text-sm mb-4 md:mb-3 overflow-y-scroll" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                                            {college.description || "An MBA in Marketing is a postgraduate degree focusing on marketing strategies, brand management, and consumer behavior, equipping students with skills for roles like Brand Manager, Sales Manager, or Market Research Analyst..."}
+                                        </p>
+                                        <hr className="mb-4 md:mb-6 opacity-50" />
+                                        <p className="text-[10px] md:text-xs text-gray-400 mb-4 font-medium">
+                                            Know more about{' '}
+                                            <span className="text-[#2D5BFF] cursor-pointer">
+                                                Courses & Fees, Admissions, Placements, Facilities, Reviews
+                                            </span>
+                                        </p>
+
+                                        {/* Footer Buttons */}
+                                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                                            <div>
+                                                <p className="text-xs font-bold text-[#2D5BFF] mb-2 uppercase">Top Courses</p>
+                                                <div className="flex -space-x-2">
+                                                    <div className="w-8 h-8 rounded-full border-2 border-white bg-red-400"></div>
+                                                    <div className="w-8 h-8 rounded-full border-2 border-white bg-blue-400"></div>
+                                                    <div className="w-8 h-8 rounded-full border-2 border-white bg-purple-400"></div>
+                                                    <div className="w-8 h-8 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center text-[10px] font-bold">+2</div>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex gap-2 w-full sm:w-auto">
+                                                <button className="flex-1 sm:flex-none border-2 border-[#2D5BFF] text-[#2D5BFF] font-bold px-4 md:px-6 py-2 rounded-lg hover:bg-blue-50 transition-colors text-xs md:text-sm">
+                                                    Apply now
+                                                </button>
+                                                <button className="flex-1 sm:flex-none bg-[#4F46E5] text-white font-bold px-4 md:px-6 py-2 rounded-lg shadow-md hover:bg-[#4338CA] transition-colors justify-center text-xs md:text-sm">
+                                                    <a href={`/colleges/${college.slug}`} >View More</a>
+                                                </button>
+                                                {/* <Link
                                                 href={`/colleges/${college.slug}`}
                                                 >
                                                 <button className="flex-1 sm:flex-none bg-[#4F46E5] text-white font-bold px-4 md:px-6 py-2 rounded-lg shadow-md hover:bg-[#4338CA] transition-colors text-xs md:text-sm">
                                                 View More
                                             </button>
                                             </Link> */}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                              );
+                            );
                         })
                     )}
                 </section>
