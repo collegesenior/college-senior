@@ -195,7 +195,7 @@ export default function CollegeListClient({
                             {
                                 title: "Degree",
                                 key: "degree",
-                                options: ["B.Tech. ( Bachelor of Technology)", "M.Tech. ( Master of Technology)", "B.E. ( Bachelor of Engineering)", "MBA ( Master of Business Administration)", "BBA ( Bachelor of Business Administration)", "BCA ( Bachelor of Computer Applications)", "B.Sc. ( Bachelor of Science)", "M.Sc. ( Master of Science)", "B.Com. ( Bachelor of Commerce)", "M.Com. ( Master of Commerce)", "B.Arch. ( Bachelor of Architecture)", "M.Arch. ( Master of Architecture)", "Ph.D. (Doctor of Philosophy)", "M.D.S. ( Master of Dental Surgery)", "B.Pharm. ( Bachelor of Pharmacy)", "M.B.B.S. ( Bachelor of Medicine and Bachelor of Surgery)", "M.Pharm. ( Master of Pharmacy)", "B.H.M. ( Bachelor of Hotel Management)"],
+                                options: ["B.Tech. (Bachelor of Technology)", "M.Tech. (Master of Technology)", "B.E. ( Bachelor of Engineering)", "MBA ( Master of Business Administration)", "BBA ( Bachelor of Business Administration)", "BCA ( Bachelor of Computer Applications)", "B.Sc. ( Bachelor of Science)", "M.Sc. ( Master of Science)", "B.Com. ( Bachelor of Commerce)", "M.Com. ( Master of Commerce)", "B.Arch. ( Bachelor of Architecture)", "M.Arch. ( Master of Architecture)", "Ph.D. (Doctor of Philosophy)", "M.D.S. ( Master of Dental Surgery)", "B.Pharm. ( Bachelor of Pharmacy)", "M.B.B.S. ( Bachelor of Medicine and Bachelor of Surgery)", "M.Pharm. ( Master of Pharmacy)", "B.H.M. ( Bachelor of Hotel Management)"],
                             },
                             {
                                 title: "Cities",
