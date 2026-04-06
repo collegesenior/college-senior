@@ -1,27 +1,9 @@
+import Header from "../components/Header";
 export default function Loading() {
   return (
-    <div className="max-w-8xl mx-auto p-4 md:px-8">
+    <div className="max-w-8xl mx-auto">
         {/* skeletom navbar section */}
-      <div className="flex items-center justify-between max-w-400 mx-auto mb-8">
-        <div className="bg-gray-200 rounded-full w-8 h-8"></div>
-        <div className="bg-gray-200 rounded-2xl w-30 h-10"></div>
-
-        {/* Desktop Navigation */}
-        <div className="hidden min-[1300px]:flex space-x-6 text-lg">
-          <div className="bg-gray-200 rounded-2xl w-30 h-10"></div>
-          <div className="bg-gray-200 rounded-2xl w-30 h-10"></div>
-          <div className="bg-gray-200 rounded-2xl w-30 h-10"></div>
-          <div className="bg-gray-200 rounded-2xl w-30 h-10"></div>
-        </div>
-
-        {/* Action Buttons & Hamburger */}
-        <div className="flex items-center space-x-4">
-          <div className="hidden min-[1300px]:flex items-center space-x-4">
-            <div className="bg-gray-200 rounded-2xl w-30 h-10"></div>
-            <div className="bg-gray-200 rounded-2xl w-30 h-10"></div>
-          </div>
-        </div>
-      </div>
+      <Header />
 
       {/* 1. Skeleton Hero Section */}
       <div className="w-full h-48 bg-gray-200 animate-pulse rounded-3xl mb-10"></div>
