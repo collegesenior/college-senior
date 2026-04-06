@@ -69,13 +69,35 @@ export default function CollegeListClient({
     };
     // Safe image extractor
     const extractImagesFromJsonb = (images: any): string[] => {
-        if (!images) return [];
-        if (Array.isArray(images)) return images;
-
         try {
-            const parsed = typeof images === 'string' ? JSON.parse(images) : images;
-            return Array.isArray(parsed) ? parsed : [];
-        } catch {
+            if (!images) return [];
+            
+            // If it's already an array of strings
+            if (Array.isArray(images) && images.every(item => typeof item === 'string')) {
+                return images;
+            }
+            
+            // If it's an array of objects like [{"image1":"url"},{"image2":"url"}]
+            if (Array.isArray(images)) {
+                return images.map((item: any) => {
+                    if (typeof item === 'string') return item;
+                    if (typeof item === 'object' && item !== null) {
+                        const key = Object.keys(item)[0];
+                        return item[key];
+                    }
+                    return '';
+                }).filter(Boolean);
+            }
+            
+            // If it's a string, try to parse it
+            if (typeof images === 'string') {
+                const parsed = JSON.parse(images);
+                return extractImagesFromJsonb(parsed);
+            }
+            
+            return [];
+        } catch (error) {
+            console.error('Error extracting images:', error);
             return [];
         }
     };
@@ -325,6 +347,12 @@ export default function CollegeListClient({
                     ) : (
                         initialColleges.map((college) => {
                             const validImages = extractImagesFromJsonb(college.image_urls);
+                            
+                            // Debug: Log the image data to see what we're working with
+                            console.log(`College: ${college.name}`);
+                            console.log('Raw image_urls:', college.image_urls);
+                            console.log('Extracted images:', validImages);
+                            
                             // Returns the first image or a placeholder if none
                             const getMainImage = (images: string[]) => {
                                 return images && images.length > 0 ? images[0] : "https://via.placeholder.com/400x300";
@@ -511,3 +539,4 @@ export default function CollegeListClient({
         </div>
     );
 }
+
