@@ -11,13 +11,13 @@ import { useScrollTrigger } from "../hooks/useScrollTrigger";
 
 export default function ContactSection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { isTriggered } = useScrollTrigger(0.7);
+  const { isTriggered, hasSubmitted } = useScrollTrigger(0.7);
 
   useEffect(() => {
-    if (isTriggered) {
+    if (isTriggered && !hasSubmitted) {
       setIsModalOpen(true);
     }
-  }, [isTriggered]);
+  }, [isTriggered, hasSubmitted]);
 
   return (
     <>
