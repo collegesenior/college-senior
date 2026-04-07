@@ -155,7 +155,7 @@ export default function CourseListClient({ initialCourses, currentParams }: Prop
             <p className="text-sm opacity-80 mb-15 md:mb-15 lg:mb-30">Home / Courses</p>
             <h2 className="text-2xl md:text-3xl flex font-semibold">Find Your Perfect Courses</h2>
             <p className="text-md md:text-lg opacity-90 mb-4"> Explore hundreds of Courses to find the right one for you. </p>
-            <form onSubmit={handleSearchSubmit} className="w-full mt-4 flex bg-white p-1 md:p-2 rounded-lg shadow-lg border border-gray-200 text-gray-800">
+            <form onChange={handleSearchSubmit} className="w-full mt-4 flex bg-white p-1 md:p-2 rounded-lg shadow-lg border border-gray-200 text-gray-800">
               <button type="submit" className="p-2 text-blue-700 hover:text-blue-600 transition">
                 <Search size={20} />
               </button>
