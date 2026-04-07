@@ -2,6 +2,7 @@
 import { useState, useTransition, useEffect } from 'react';
 import Headers from '../components/Header';
 import Footer from '../components/Footer';
+import { useScrollLock } from '../hooks/useScrollLock';
 
 type CollegeType = {
     id: number;
@@ -53,13 +54,21 @@ export default function CollegeListClient({
     const [selectedCollegeImages, setSelectedCollegeImages] = useState<any>(null);
     const [selectedCollegeName, setSelectedCollegeName] = useState('');
     const [carouselInitialIndex, setCarouselInitialIndex] = useState(0);
-    const { isTriggered } = useScrollTrigger(0.7);
+    const { isTriggered, hasSubmitted } = useScrollTrigger(0.7);
+    
+    // Lock scroll when filter sidebar is open on mobile
+    useScrollLock(isFilterOpen);
 
     useEffect(() => {
-        if (isTriggered) {
+        if (isTriggered && !hasSubmitted) {
             setIsModalOpen(true);
         }
-    }, [isTriggered]);
+    }, [isTriggered, hasSubmitted]);
+
+    // Scroll to top when component mounts
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     const hiddenFields = {
         city: currentParams.city || 'All',
@@ -323,7 +332,7 @@ export default function CollegeListClient({
                 {/* Results Section */}
                 <section className="w-full lg:w-3/4">
                     <div className="@max-xs:flex-1 sm:flex md:flex lg:flex justify-between items-center mb-6">
-                        <h3 className="font-bold text-lg text-gray-800 mb-2">
+                        <h3 className="font-bold text-lg text-gray-800 m-1 mb-2">
                             Showing {initialColleges.length} Colleges
                         </h3>
                         <select
@@ -348,10 +357,6 @@ export default function CollegeListClient({
                         initialColleges.map((college) => {
                             const validImages = extractImagesFromJsonb(college.image_urls);
                             
-                            // Debug: Log the image data to see what we're working with
-                            console.log(`College: ${college.name}`);
-                            console.log('Raw image_urls:', college.image_urls);
-                            console.log('Extracted images:', validImages);
                             
                             // Returns the first image or a placeholder if none
                             const getMainImage = (images: string[]) => {
@@ -506,13 +511,6 @@ export default function CollegeListClient({
                                                 <button className="flex-1 sm:flex-none bg-[#4F46E5] text-white font-bold px-4 md:px-6 py-2 rounded-lg shadow-md hover:bg-[#4338CA] transition-colors justify-center text-xs md:text-sm">
                                                     <a href={`/colleges/${college.slug}`} >View More</a>
                                                 </button>
-                                                {/* <Link
-                                                href={`/colleges/${college.slug}`}
-                                                >
-                                                <button className="flex-1 sm:flex-none bg-[#4F46E5] text-white font-bold px-4 md:px-6 py-2 rounded-lg shadow-md hover:bg-[#4338CA] transition-colors text-xs md:text-sm">
-                                                View More
-                                            </button>
-                                            </Link> */}
                                             </div>
                                         </div>
                                     </div>
@@ -539,4 +537,3 @@ export default function CollegeListClient({
         </div>
     );
 }
-
