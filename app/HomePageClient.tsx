@@ -5,13 +5,13 @@ import { useScrollTrigger } from './hooks/useScrollTrigger';
 
 export default function HomePageClient({ children }: { children: React.ReactNode }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { isTriggered } = useScrollTrigger(0.7);
+  const { isTriggered, hasSubmitted } = useScrollTrigger(0.7);
 
   useEffect(() => {
-    if (isTriggered) {
+    if (isTriggered && !hasSubmitted) {
       setIsModalOpen(true);
     }
-  }, [isTriggered]);
+  }, [isTriggered, hasSubmitted]);
 
   useEffect(() => {
     const handleButtonClick = () => setIsModalOpen(true);
@@ -31,3 +31,4 @@ export default function HomePageClient({ children }: { children: React.ReactNode
     </>
   );
 }
+
