@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { markEnquirySubmitted } from '../hooks/useScrollTrigger';
+import { useScrollLock } from '../hooks/useScrollLock';
 
 interface EnquiryFormModalProps {
   isOpen: boolean;
@@ -22,6 +23,9 @@ export default function EnquiryFormModal({ isOpen, onClose, sourcePage = 'Genera
   const [isVisible, setIsVisible] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  
+  // Lock scroll when modal is open
+  useScrollLock(isOpen);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData({ ...formData, [field]: value });
@@ -33,22 +37,11 @@ export default function EnquiryFormModal({ isOpen, onClose, sourcePage = 'Genera
 
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
       const timer = setTimeout(() => setIsVisible(true), 10);
       return () => clearTimeout(timer);
     } else {
-      const timer = setTimeout(() => {
-        document.body.style.overflow = 'unset';
-      }, 300);
-      return () => {
-        clearTimeout(timer);
-        document.body.style.overflow = 'unset';
-      };
+      setIsVisible(false);
     }
-  }, [isOpen]);
-
-  useEffect(() => {
-    setIsVisible(isOpen);
   }, [isOpen]);
 
   const validateForm = () => {
