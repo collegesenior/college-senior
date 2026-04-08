@@ -23,13 +23,13 @@ const SimilarCollegesSection: React.FC<SimilarCollegesSectionProps> = ({ college
   if (colleges.length === 0) return null;
 
   return (
-    <section className="bg-white p-6 rounded-xl border border-gray-200 mt-6">
-      <h3 className="text-lg font-bold text-gray-800 mb-4">More Colleges in {currentCity}</h3>
+    <section className="bg-white p-3 lg:p-6 rounded-xl border border-gray-200 mt-6">
+      <h3 className="text-md lg:text-lg font-bold text-gray-800 mb-4">More Colleges in {currentCity}</h3>
       <div className="overflow-x-auto pb-2 -mx-2 px-2">
         <div className="flex gap-4 min-w-max">
           {colleges.map((college) => (
             <Link key={college.id} href={`/colleges/${college.slug}`}>
-              <div className="w-72 flex-shrink-0 p-5 border border-gray-200 rounded-xl hover:border-blue-400 hover:shadow-md transition-all cursor-pointer bg-gradient-to-br from-white to-slate-50">
+              <div className="w-72 shrink-0 p-5 border border-gray-200 rounded-xl hover:border-blue-400 hover:shadow-md transition-all cursor-pointer bg-gradient-to-br from-white to-slate-50">
                 <div className="flex flex-col h-full">
                   <div className="flex items-center gap-3 mb-4">
                     {college.logo_url ? (
