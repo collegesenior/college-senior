@@ -4,7 +4,7 @@ import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import * as Icons from "lucide-react";
 import {
-    MapPin, Award, Download
+    MapPin, Download
 } from 'lucide-react';
 import { SectionBlock, FacilityJSON, CollegeCourseData } from './_components/types';
 import Header from '@/app/components/Header';
@@ -25,6 +25,7 @@ import TopCoursesSection from './_components/TopCoursesSection';
 import SimilarCollegesSection from './_components/SimilarCollegesSection';
 import TableOfContents from './_components/TableOfContents';
 import EnquiryFormModal from '@/app/components/EnquiryFormModal';
+import TabEnquiryForm from '@/app/components/TabEnquiryForm';
 
 interface SimilarCollege {
     id: number;
@@ -44,8 +45,10 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
     const courseId = searchParams.get('courseId');
     const [hasShownModal, setHasShownModal] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { isTriggered } = useScrollTrigger(0.7);
-    
+    const [isTabFormOpen, setIsTabFormOpen] = useState(false);
+    const [currentTabForm, setCurrentTabForm] = useState('');
+    const { isTriggered, hasSubmitted } = useScrollTrigger(0.7);
+
     // Detect active tab from URL query params
     const getActiveTabFromURL = () => {
         if (searchParams.has('courseId')) return 'courses'; // Course detail view
@@ -58,7 +61,7 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
         if (searchParams.has('gallery')) return 'gallery';
         if (searchParams.has('campus')) return 'campus';
         if (searchParams.has('news')) return 'news';
-        
+
         return 'overview';
     };
 
@@ -66,18 +69,24 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
 
     // Show modal on 70% scroll, but not on course detail view
     useEffect(() => {
-        if (isTriggered && !hasShownModal && !courseId) {
+        if (isTriggered && !hasShownModal && !courseId && !hasSubmitted) {
             setIsModalOpen(true);
             setHasShownModal(true);
         }
-    }, [isTriggered, hasShownModal, courseId]);
+    }, [isTriggered, hasShownModal, courseId, hasSubmitted]);
+
+    // Function to open tab-specific enquiry form
+    const openTabEnquiryForm = (tabName: string) => {
+        setCurrentTabForm(tabName);
+        setIsTabFormOpen(true);
+    };
 
     const hiddenFields = {
         collegeId: college.id.toString(),
         collegeName: college.name
     };
 
-   
+
 
     // Update URL when tab changes (but not when courseId changes)
     useEffect(() => {
@@ -86,21 +95,21 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
             'overview': pathname,
             'courses': currentCourseId ? `${pathname}?courses&fees&courseId=${currentCourseId}` : `${pathname}?courses&fees`,
             'admission': `${pathname}?admission`,
-            'placements': `${pathname}?placements`, 
+            'placements': `${pathname}?placements`,
             'cutoffs': `${pathname}?cutoffs`,
             'scholarship': `${pathname}?scholarship`,
             'ranking': `${pathname}?ranking`,
             'gallery': `${pathname}?gallery`,
             'campus': `${pathname}?campus`,
             'news': `${pathname}?news`,
-          
+
         };
         const targetURL = tabToURLMap[activeTab] || pathname;
         const currentURL = window.location.search;
         if (currentURL !== targetURL.split('?')[1]) {
             router.push(targetURL, { scroll: false });
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeTab, pathname, router]);
 
     // Scroll to course on mount if courseId exists
@@ -126,7 +135,7 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
         { id: 'gallery', label: 'Gallery' },
         { id: 'campus', label: 'Campus' },
         { id: 'news', label: 'News' },
-        
+
     ];
 
     // Handle tab change with scroll to top
@@ -140,7 +149,7 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
                 const navHeight = 60; // Sticky nav height
                 const padding = 20; // Extra padding
                 const targetPosition = mainContent.offsetTop - headerHeight - navHeight - padding;
-                
+
                 window.scrollTo({
                     top: Math.max(0, targetPosition),
                     behavior: 'smooth'
@@ -243,53 +252,77 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
             <Header />
 
             {/* 1. HERO SECTION */}
-            <section className="bg-white max-w-365 mx-auto">
-                <div className="max-w-450 mx-auto flex flex-col-reverse lg:flex-row items-start">
-                    {/* Left side  */}
-                    <div className="lg:w-3/5 p-6 md:p-12 flex flex-col justify-center">
-                        <div className="flex gap-2 mt-4 items-end justify-end">
-                            <nav className="flex-1 text-xs text-gray-400 font-medium uppercase tracking-widest mb-2">
+            <section className="bg-white px-3 md:px-6 lg:px-8">
+                <div className="max-w-450 mx-auto flex flex-col-reverse lg:flex-row items-stretch">
+
+                    {/* LEFT SIDE */}
+                    <div className="w-full lg:w-3/5 flex flex-col justify-center py-4 md:py-6 lg:py-8">
+
+                        {/* TOP BAR */}
+                        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                            <nav className="text-[10px] md:text-xs text-gray-400 font-medium uppercase tracking-wider">
                                 Home / Colleges / {college.slug}
                             </nav>
-                            <span className="bg-blue-600 text-white text-xs font-medium px-6 py-1.5 rounded-md uppercase">
-                                {college.ownership}
-                            </span>
-
-                            <span className="bg-amber-100 text-amber-700 text-xs font-medium px-6 py-1.5 rounded-md uppercase flex items-center gap-1">
-                                <Award size={12} /> NIRF Rank {college.nirf_ranking} (India)
-                            </span>
                         </div>
-                        <div className="flex flex-col md:flex-row items-center md:items-center gap-6 mb-3">
-                            <div className="w-25 h-25 p-2 bg-white rounded-full  shrink-0">
+
+                        {/* COLLEGE INFO */}
+                        <div className='flex flex-row-reverse justify-between'>
+
+                            {/* LOGO */}
+                            <div className="flex gap-2 items-center mx-3">
+                                <span className="bg-blue-600 text-white text-[10px] md:text-xs px-3 md:px-4 py-1 rounded-md uppercase">
+                                    {college.ownership}
+                                </span>
+
+                                <span className="bg-amber-100 text-amber-700 text-[10px] md:text-xs px-3 md:px-4 py-1 rounded-md flex items-center gap-1">
+                                    NIRF Rank {college.nirf_ranking}
+                                </span>
+                            </div>
+                            <div className="w-15 h-15 md:w-24 md:h-24 p-2 bg-white rounded-full shrink-0 shadow-sm">
                                 <Image
                                     src={college.logo_url || "/avit.png"}
                                     alt="Logo"
-                                    width={100} height={100}
+                                    width={100}
+                                    height={100}
                                     className="w-full h-full object-contain"
                                 />
                             </div>
-                            <div className="text-center md:text-left">
-                                <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-2">
-                                </div>
-                                <h1 className="text-md md:text-md font-medium text-slate-900 leading-tight">
+                        </div>
+                        <div className="flex flex-col sm:flex-row items-left sm:items-start gap-4 md:gap-6 mb-4 text-left sm:text-left">
+
+                            {/* TEXT */}
+                            <div>
+                                <h1 className="text-slate-900 text-left">
                                     {college.name}
                                 </h1>
-                                <p className="flex items-center justify-center md:justify-start gap-2 text-gray-500 font-medium">
-                                    <MapPin size={18} className="text-blue-600" /> {college.city}, {college.state}
+
+                                <p className="flex items-center justify-left sm:justify-start gap-2 text-gray-500 text-sm md:text-base mt-1">
+                                    <MapPin size={16} className="text-blue-600" />
+                                    {college.city}, {college.state}
                                 </p>
                             </div>
                         </div>
 
-                        <div className="flex flex-wrap gap-4">
-                         
-                            <button className="p-2 bg-white border-2 border-slate-200 text-slate-700 rounded-xl font-medium hover:bg-slate-50 transition-all flex items-center gap-2">
-                                <Download size={18} /> Download Brochure
+                        {/* ACTIONS */}
+                        <div className="flex flex-wrap justify-left sm:justify-start gap-3">
+                            <button className="px-2 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg text-sm md:text-base font-medium hover:bg-slate-50 flex items-left gap-2">
+                                <Download size={16} />
+                                Download Brochure
                             </button>
                         </div>
                     </div>
-                    <div className="lg:w-2/5 flex flex-col items-center justify-center p-6 md:p-5 bg-gray-50">
-                        <Image src={college.banner_url || "/avit.png"} alt="Campus" width={1000} height={1000} className="object-cover w-full h-90 rounded-bl-[50%] rounded-tl-[2%] rounded-r-[5%]" priority />
+
+                    {/* RIGHT SIDE (IMAGE) */}
+                    <div className="w-full lg:w-2/5 bg-gray-50 lg:m-3 flex items-center justify-center overflow-hidden">
+                        <Image
+                            src={college.banner_url || "/avit.png"}
+                            alt="Campus"
+                            width={1000} height={600}
+                            className="w-full h-55 md:h-75 lg:h-full object-cover rounded-lg"
+                            priority
+                        />
                     </div>
+
                 </div>
             </section>
 
@@ -310,13 +343,27 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
             </nav>
 
             {/* 3. CONTENT AREA */}
-            <main className="max-w-360 mx-auto px-4 py-8 flex flex-col lg:flex-row gap-8">
+            <main className="max-w-360 mx-auto px-2 py-2 lg:px-4 lg:py-8 flex flex-col lg:flex-row gap-8">
                 <div className="lg:w-3/4 space-y-3">
 
                     {/* --- TAB: OVERVIEW --- */}
                     {activeTab === 'overview' && (
                         <>
                             <TableOfContents sections={getTableOfContents('overview')} collegeName={college.name} currentCity={college.city} />
+                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-3 lg:mb-6">
+                                <div className="lg:flex lg:justify-between lg:items-center md:text-left lg:text-left md:flex md:justify-between md:items-center text-center">
+                                    <div>
+                                        <h3 className="font-semibold text-blue-900 my-2">Get Complete College Information</h3>
+                                        <p className="text-blue-700 text-sm ">Get detailed overview, admission process, and expert guidance</p>
+                                    </div>
+                                    <button
+                                        onClick={() => openTabEnquiryForm('Overview')}
+                                        className="bg-blue-600 text-white text-sm m-3 text-center px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition"
+                                    >
+                                        Get Details
+                                    </button>
+                                </div>
+                            </div>
                             <div id="about-college">
                                 <OverviewTab college={college} setActiveTab={setActiveTab} />
                             </div>
@@ -332,10 +379,24 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
                     {/* --- TAB: COURSES (FULL LIST) --- */}
                     {activeTab === 'courses' && (
                         <>
+                            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-3 lg:mb-6">
+                                <div className="flex justify-between items-center">
+                                    <div>
+                                        <h3 className="font-semibold text-green-900">Get Course & Fee Details</h3>
+                                        <p className="text-green-700 text-sm">Get complete course information, fees structure, and admission guidance</p>
+                                    </div>
+                                    <button
+                                        onClick={() => openTabEnquiryForm('Courses & Fees')}
+                                        className="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition"
+                                    >
+                                        Get Details
+                                    </button>
+                                </div>
+                            </div>
                             {/* <TableOfContents sections={getTableOfContents('courses')} collegeName={college.name} /> */}
                             <section className="rounded-2xl" id="courses-fees-2026">
-                                <CourseFeeTabNew 
-                                    courseOfferings={college.course_offerings.map((offering:any) => ({
+                                <CourseFeeTabNew
+                                    courseOfferings={college.course_offerings.map((offering: any) => ({
                                         ...offering,
                                         course: {
                                             ...offering.course,
@@ -345,7 +406,7 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
                                         collegecourse_data: offering.collegecourse_data as CollegeCourseData | null
                                     }))}
                                     collegeName={college.name}
-                                    coursePara={coursePara} 
+                                    coursePara={coursePara}
                                     highlightedCourseId={courseId ? Number(courseId) : null}
                                     faqs={college.faqs?.[0]?.faq_data as Array<{ category: string; questions: Array<{ q: string; a: string }> }> | undefined}
                                 />
@@ -363,11 +424,25 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
                     {activeTab === 'admission' && (
                         <>
                             <TableOfContents sections={getTableOfContents('admission')} collegeName={college.name} currentCity={college.city} />
+                            <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-3 lg:mb-6">
+                                <div className="flex justify-between items-center">
+                                    <div>
+                                        <h3 className="font-semibold text-purple-900">Get Admission Guidance</h3>
+                                        <p className="text-purple-700 text-sm">Get step-by-step admission process and expert counseling</p>
+                                    </div>
+                                    <button
+                                        onClick={() => openTabEnquiryForm('Admission')}
+                                        className="bg-purple-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-purple-700 transition"
+                                    >
+                                        Get Guidance
+                                    </button>
+                                </div>
+                            </div>
                             <section className="bg-white p-8 rounded-2xl shadow-sm" id="admission-overview">
                                 <h2 className="text-2xl font-bold mb-6">{college.name} Admission Process</h2>
                                 <p className="text-gray-600 mb-6 text-md">{admissionPara}</p>
                                 <div id="step-by-step-admission-process-2026">
-                                    <AdmissionTab admissions={college.admissions as unknown as Array<{ id: number; college_id: number; admission_data: Array<{ degree_level: string; streams: Array<{ stream_name: string; courses: Array<{ course_title: string; content: string; duration: string; fees: string; seats: string; eligibility: string; entrance_exam: string; selection_process: string; cutoff_info: string }> }> }>; admission_process?: Array<{ step: number; title: string; content: string }> }>} collegeName={college.name} admissionPara={admissionPara} faqs={college.faqs?.[0]?.faq_data as unknown as Array<{ category: string; questions: Array<{ q: string; a: string }> }>}/>
+                                    <AdmissionTab admissions={college.admissions as unknown as Array<{ id: number; college_id: number; admission_data: Array<{ degree_level: string; streams: Array<{ stream_name: string; courses: Array<{ course_title: string; content: string; duration: string; fees: string; seats: string; eligibility: string; entrance_exam: string; selection_process: string; cutoff_info: string }> }> }>; admission_process?: Array<{ step: number; title: string; content: string }> }>} collegeName={college.name} admissionPara={admissionPara} faqs={college.faqs?.[0]?.faq_data as unknown as Array<{ category: string; questions: Array<{ q: string; a: string }> }>} />
                                 </div>
                             </section>
                             <div id="admission-faqs">
@@ -386,11 +461,25 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
                     {activeTab === 'placements' && (
                         <>
                             <TableOfContents sections={getTableOfContents('placements')} collegeName={college.name} currentCity={college.city} />
+                            <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-3 lg:mb-6">
+                                <div className="flex justify-between items-center">
+                                    <div>
+                                        <h3 className="font-semibold text-orange-900">Get Placement Details</h3>
+                                        <p className="text-orange-700 text-sm">Get complete placement statistics, top recruiters, and career guidance</p>
+                                    </div>
+                                    <button
+                                        onClick={() => openTabEnquiryForm('Placements')}
+                                        className="bg-orange-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-orange-700 transition"
+                                    >
+                                        Get Details
+                                    </button>
+                                </div>
+                            </div>
                             <section className="bg-white p-8 rounded-2xl shadow-sm" id="placement-details">
                                 <h2 className="text-2xl font-bold mb-6">{college.name} Placement Details</h2>
                                 <p className="text-gray-600 mb-5">{placementPara}</p>
                                 <div id="placement-statistics">
-                                    <PlacementTab 
+                                    <PlacementTab
                                         placements={college.placements as unknown as Array<{ id: number; college_id: number; placement_data: Array<{ title: string; content: string; objectives_title: string; objectives: string[]; process_title: string; placement_process: Array<{ step: string; name: string; desc: string }> }> }>}
                                         collegeName={college.name}
                                         faqs={college.faqs?.[0]?.faq_data as unknown as Array<{ category: string; questions: Array<{ q: string; a: string }> }>}
@@ -419,6 +508,20 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
                     {activeTab === 'cutoffs' && (
                         <>
                             <TableOfContents sections={getTableOfContents('cutoffs')} collegeName={college.name} currentCity={college.city} />
+                            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-3 lg:mb-6">
+                                <div className="flex justify-between items-center">
+                                    <div>
+                                        <h3 className="font-semibold text-red-900">Get Cutoff Information</h3>
+                                        <p className="text-red-700 text-sm">Get latest cutoff trends and admission probability analysis</p>
+                                    </div>
+                                    <button
+                                        onClick={() => openTabEnquiryForm('Cutoffs')}
+                                        className="bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition"
+                                    >
+                                        Get Details
+                                    </button>
+                                </div>
+                            </div>
                             <section className="bg-white md:p-8 p-4 rounded-2xl shadow-sm" id="cutoff-trends">
                                 <h2 className="text-2xl font-bold mb-6">{college.name} Cutoff Trends</h2>
                                 <p className="text-gray-600 mb-6 text-md">{cutoffPara}</p>
@@ -446,6 +549,20 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
                     {activeTab === 'scholarship' && (
                         <>
                             <TableOfContents sections={getTableOfContents('scholarship')} collegeName={college.name} currentCity={college.city} />
+                            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-3 lg:mb-6">
+                                <div className="flex justify-between items-center">
+                                    <div>
+                                        <h3 className="font-semibold text-yellow-900">Get Scholarship Information</h3>
+                                        <p className="text-yellow-700 text-sm">Get complete scholarship details and application guidance</p>
+                                    </div>
+                                    <button
+                                        onClick={() => openTabEnquiryForm('Scholarship')}
+                                        className="bg-yellow-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-yellow-700 transition"
+                                    >
+                                        Get Details
+                                    </button>
+                                </div>
+                            </div>
                             <section className="bg-white md:p-8 p-4 rounded-2xl shadow-sm" id="scholarship-details">
                                 <h2 className="text-2xl font-bold mb-6">{college.name} Scholarship Details</h2>
                                 <p className="text-gray-600">{scholarshipPara || 'Scholarship details will be available soon. Please check back later for the latest information on scholarships offered.'}</p>
@@ -467,12 +584,26 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
                     {activeTab === 'ranking' && (
                         <>
                             <TableOfContents sections={getTableOfContents('ranking')} collegeName={college.name} currentCity={college.city} />
+                            <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4 mb-3 lg:mb-6">
+                                <div className="flex justify-between items-center">
+                                    <div>
+                                        <h3 className="font-semibold text-indigo-900">Get Ranking Analysis</h3>
+                                        <p className="text-indigo-700 text-sm">Get detailed ranking analysis and college comparison</p>
+                                    </div>
+                                    <button
+                                        onClick={() => openTabEnquiryForm('Ranking')}
+                                        className="bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 transition"
+                                    >
+                                        Get Analysis
+                                    </button>
+                                </div>
+                            </div>
                             <div className="grid grid-cols-1 gap-6 animate-in fade-in duration-500" id="ranking-details">
                                 <section className="bg-white md:p-8 p-4 rounded-2xl shadow-sm">
                                     <h2 className="text-2xl font-bold mb-6">{college.name} Ranking Details</h2>
                                     <p className="text-gray-600 my-6">{rankingPara}</p>
                                     <RankingTab
-                                        rankings={college.rankings?.flatMap((record:any) => 
+                                        rankings={college.rankings?.flatMap((record: any) =>
                                             record.rank_data as unknown as Array<{ org: string; data: Array<{ year: number; rank: number | null; score?: string; stream: string; desc?: string }> }>
                                         ) || []}
                                         collegeName={college.name}
@@ -494,7 +625,7 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
                     {/* --- TAB: GALLERY (FULL LIST) --- */}
                     {activeTab === 'gallery' && (
                         <div className="space-y-10">
-                            {college.images?.map((cat:any) => {
+                            {college.images?.map((cat: any) => {
                                 // Cast the JSON array correctly
                                 const items = cat.media_url as unknown as GalleryMedia[];
 
@@ -592,14 +723,14 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
                     <div className="bg-blue-600 rounded-xl p-6 text-white sticky top-35">
                         <h3 className="text-lg font-bold mb-2">Get Admission Help</h3>
                         <p className="text-blue-100 text-sm mb-4">Get expert guidance for {college.name} admissions</p>
-                         <div className="space-y-5">
+                        <div className="space-y-5">
                             <input type="text" placeholder="Your Name" className="w-full px-3 py-2 rounded-lg bg-white/20 border border-white/10 text-white placeholder:text-blue-200 focus:bg-white focus:text-gray-900 outline-none transition-all" />
                             <input type="tel" placeholder="Mobile No" className="w-full px-3 py-2 rounded-lg bg-white/20 border border-white/10 text-white placeholder:text-blue-200 focus:bg-white focus:text-gray-900 outline-none transition-all" />
                             <input type="tel" placeholder="Email" className="w-full px-3 py-2 rounded-lg bg-white/20 border border-white/10 text-white placeholder:text-blue-200 focus:bg-white focus:text-gray-900 outline-none transition-all" />
                             {/* <button className="w-full py-2 bg-white text-blue-600 rounded-xl font-bold hover:bg-blue-50 transition-all">Request Call Back</button> */}
                         </div>
                         <button
-                           
+
                             className="w-full py-3 mt-4 bg-white text-blue-600 rounded-xl font-bold hover:bg-blue-50 transition-all"
                         >
                             Request Callback
@@ -609,11 +740,17 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
             </main>
 
             <Footer />
-            <EnquiryFormModal 
-                isOpen={isModalOpen} 
+            <EnquiryFormModal
+                isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 sourcePage="College View"
                 hiddenFields={hiddenFields}
+            />
+            <TabEnquiryForm
+                isOpen={isTabFormOpen}
+                onClose={() => setIsTabFormOpen(false)}
+                collegeName={college.name}
+                tabName={currentTabForm}
             />
         </div>
     );
