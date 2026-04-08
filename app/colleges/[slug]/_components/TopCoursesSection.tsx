@@ -26,18 +26,16 @@ const TopCoursesSection: React.FC<TopCoursesSectionProps> = ({ courses, collegeN
   
 
   return (
-    <section className="bg-white p-6 rounded-xl border border-gray-200 mt-6">
-      <h3 className="text-lg font-bold text-gray-800 mb-4">Top Courses Offered at {collegeName}</h3>
+    <section className="bg-white p-3 lg:p-6 rounded-xl border border-gray-200 mt-6">
+      <h3 className="text-md lg:text-lg font-bold text-gray-800 mb-4">Top Courses Offered at {collegeName}</h3>
       <div className="overflow-x-auto pb-2 -mx-2 px-2" >
         <div className="flex gap-4 min-w-max">
           {topCourses.map((offering) => (
             <div key={offering.id} className="w-64 shrink-0 p-5 border border-gray-200 rounded-xl hover:border-blue-400 hover:shadow-md transition-all bg-linear-to-br from-white to-blue-50/30">
               <div className="flex flex-col h-full">
-                <div className="p-3 bg-blue-600 rounded-lg w-fit mb-3">
-                  <BookOpen size={20} className="text-white" />
-                </div>
+               
                 <h4 className="font-bold text-gray-800 text-sm mb-3 line-clamp-2 min-h-10">{offering.course.name}</h4>
-                <div className="mt-auto space-y-2">
+                <div className="flex mt-auto space-y-2">
                   <div className="flex items-center gap-2 text-xs text-gray-600 bg-white px-3 py-2 rounded-lg border border-gray-100">
                     <Clock size={14} className="text-blue-600" />
                     <span className="font-medium">{offering.course.duration}</span>
