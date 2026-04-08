@@ -56,45 +56,47 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
     };
 
     return (
-        <div className="space-y-6 animate-in fade-in duration-500">
+        <div className="space-y-3 lg:space-y-6 animate-in fade-in duration-500">
             {/* 1. ABOUT */}
-            <section className="bg-white p-8 rounded-2xl">
-                <h2 className="text-xl font-bold mb-4">About {college.name}</h2>
-                <p className="text-gray-600 leading-relaxed">{college.description}</p>
-                <h3 className="text-lg font-bold mb-2 mt-2">{college.name} Overview</h3>
-                <p className="text-gray-600 leading-relaxed">{overviewContent}</p>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+            <section className="bg-white p-4 lg:p-8 rounded-2xl">
+                <h2 className="text-md lg:text-xl font-bold mb-4">About {college.name}</h2>
+                <p className="text-gray-600 text-sm lg:text-md leading-relaxed">{college.description}</p>
+                <h3 className="text-md lg:text-lg font-bold mb-4 mt-4">{college.name} Overview</h3>
+                <p className="text-sm lg:text-md text-gray-600 leading-relaxed">{overviewContent}</p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 lg:mt-8">
 
-                    <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                    <div className="p-2 lg:p-4 bg-slate-50 rounded-xl border border-slate-100">
                         <Users className="text-blue-600 mb-2" size={20} />
                         <p className="text-[10px] text-gray-400 uppercase font-bold">Avg Package</p>
-                        <p className="text-lg font-bold">₹{(college as any).avg_package || 'N/A'}</p>
+                        <p className="text-md lg:text-lg font-bold">₹{(college as any).avg_package || 'N/A'}</p>
                     </div>
-                    <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                    <div className="p-2 lg:p-4 bg-slate-50 rounded-xl border border-slate-100">
                         <BookOpen className="text-blue-600 mb-2" size={20} />
                         <p className="text-[10px] text-gray-400 uppercase font-bold">Courses</p>
-                        <p className="text-lg font-bold">{college.course_offerings.length}+</p>
+                        <p className="text-md lg:text-lg font-bold">{college.course_offerings.length}+</p>
                     </div>
-                    <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                    <div className="p-2 lg:p-4 bg-slate-50 rounded-xl border border-slate-100">
                         <Building2 className="text-blue-600 mb-2" size={20} />
                         <p className="text-[10px] text-gray-400 uppercase font-bold">Established</p>
-                        <p className="text-lg font-bold">{college.established || 'N/A'}</p>
+                        <p className="text-md lg:text-lg font-bold">{college.established || 'N/A'}</p>
                     </div>
                 </div>
             </section>
 
             {/* 2. COURSE & FEES */}
-            <section className="bg-white p-8 rounded-2xl">
+            <section className="bg-white p-4 md:p-6 lg:p-8 rounded-2xl">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl font-bold">{college.name} Courses 2026</h2>
+                    <h2 className="text-md lg:text-lg font-bold">{college.name} Courses 2026</h2>
                     <button onClick={() => handleViewAll('courses')} className="text-blue-600 text-sm font-bold flex items-center gap-1">
                         View All <ChevronRight size={16} />
                     </button>
                 </div>
-                <p className="text-gray-600 mb-4">{coursePara || 'No course details available.'}</p>
+                <p className="text-sm lg:text-md text-gray-600 mb-4">{coursePara || 'No course details available.'}</p>
                 <div className="grid gap-4">
-                    <h3 className="font-bold text-lg">{college.name} Courses, Fees</h3>
-                    <table className="w-full border-collapse">
+                    <h3 className="font-bold text-md lg:text-lg">{college.name} Courses, Fees</h3>
+                    <div className='flex w-full overflow-x-scroll'>
+
+                    <table className="w-full border-collapse overflow-x-scroll text-sm lg:text-lg">
                         <thead>
                             <tr className=" text-left text-md font-bold border-b border-gray-300 bg-slate-50">
                                 <th className="p-3">Course
@@ -116,7 +118,7 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
                                     className="border-b border-gray-300 last:border-b-0 hover:bg-gray-50"
                                 >
                                     <td className="p-3">
-                                        <p className="font-medium text-gray-800">
+                                        <p className="font-medium w-60 text-gray-800">
                                             {offering.course.name}
                                         </p>
                                         <p className="text-xs text-gray-500 flex items-center gap-2">
@@ -142,29 +144,30 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
                             ))}
                         </tbody>
                     </table>
+                    </div>
 
                 </div>
             </section>
 
             {/* ADMISSION */}
-            <section className="bg-white p-8 rounded-2xl">
+            <section className="bg-white p-3 lg:p-8 rounded-2xl">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl font-bold">{college.name} Admission, 2026</h2>
+                    <h2 className="text-lg lg:text-xl font-bold">{college.name} Admission, 2026</h2>
                     <button onClick={() => handleViewAll('admission')} className="text-blue-600 text-sm font-bold flex items-center gap-1">
                         View Details <ChevronRight size={16} />
                     </button>
                 </div>
 
-                {college.admissions && college.admissions.length > 0 && college.admissions.slice(0, 2).map((admission:any) => {
+                {college.admissions && college.admissions.length > 0 && college.admissions.slice(0, 2).map((admission) => {
                     // Parse the steps specifically for this admission record
 
 
                     return (
                         <div key={admission.id} className="mb-8 last:mb-0">
-                            <h3 className="font-bold text-lg mb-2">{college.name} Admission Overview</h3>
+                            <h3 className="font-bold text-md lg:text-lg mb-2">{college.name} Admission Overview</h3>
 
                             {/* 1. General Admission Paragraph */}
-                            <p className="text-gray-600 mb-6">{admissionPara}</p>
+                            <p className="text-gray-600 text-sm lg:text-md mb-6">{admissionPara}</p>
 
                             <h4 className="font-bold text-md my-4 pt-3 ">
                                 Step-by-Step Admission Process 2026
@@ -184,8 +187,8 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
 
                                         {/* Step Content */}
                                         <div className="flex-1">
-                                            <h5 className="font-bold text-gray-800 text-md">{item.title}</h5>
-                                            <p className="text-gray-500 text-sm mt-1 leading-relaxed">
+                                            <h5 className="font-bold text-gray-800 text-sm lg:text-md">{item.title}</h5>
+                                            <p className="text-gray-500 text-xs lg:text-sm mt-1 leading-relaxed">
                                                 {item.content}
                                             </p>
                                         </div>
@@ -199,9 +202,9 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
             </section>
 
             {/* 4. PLACEMENT  */}
-            <section className="bg-white p-8 rounded-2xl shadow-sm">
+            <section className="bg-white p-3 lg:p-8 rounded-2xl shadow-sm">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl font-bold">{college.name} Placements {PlacementStats?.year || '2026'}</h2>
+                    <h2 className="text-md lg:text-xl font-bold">{college.name} Placements {PlacementStats?.year || '2026'}</h2>
                     <button onClick={() => handleViewAll('placements')} className="text-blue-600 text-sm font-bold flex items-center gap-1">
                         View Placement Report <ChevronRight size={16} />
                     </button>
@@ -209,7 +212,7 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
 
                 {/* Placement Paragraph (Already extracted in your previous steps) */}
                 {placementPara && (
-                    <p className="text-gray-600 mb-6 leading-relaxed text-sm md:text-base">
+                    <p className="text-gray-600 mb-6 leading-relaxed text-sm lg:text-md md:text-base">
                         {placementPara}
                     </p>
                 )}
@@ -248,7 +251,7 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
                     <h3 className="font-bold text-gray-700 my-5">{college.name} Top Recruiters</h3>
                     <div className="flex flex-wrap gap-4">
                     {college.placements && college.placements.length > 0 && college.placements[0]?.top_recruiters?.map((recruiter: string, index: number) => (
-                            <div key={index} className="px-4 py-2 bg-blue-100 border border-blue-300 rounded-bl rounded-full text-sm font-medium text-gray-700">
+                            <div key={index} className="px-2 py-1.5 lg:px-4 lg:py-2 bg-blue-100 border border-blue-300 rounded-bl rounded-full text-sm font-medium text-gray-700">
                                 {recruiter}
                             </div>
                         ))}
@@ -259,11 +262,11 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
             </section>
 
             {/* 5. CUTOFF  */}
-            <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+            <section className="bg-white p-3 lg:p-8 rounded-2xl shadow-sm border border-gray-100">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl font-bold">{college.name} CutOffs 2026</h2>
+                    <h2 className="text-md lg:text-xl font-bold">{college.name} CutOffs 2026</h2>
                     <button onClick={() => handleViewAll('cutoffs')} className="text-blue-600 text-sm font-bold flex items-center gap-1">
-                        View CutOff Details <ChevronRight size={16} />
+                        View Cutoff Details <ChevronRight size={16} />
                     </button>
                 </div>
 
@@ -289,7 +292,7 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
 
                     if (!firstBlock) {
                         return (
-                            <p className="text-gray-600 mb-6 text-md leading-relaxed">
+                            <p className="text-gray-600 mb-6 text-sm lg:text-md leading-relaxed">
                                 {cutoffPara || `The cutoff ranks for ${college.name} are determined based on entrance exam difficulty and seat availability.`}
                             </p>
                         );
@@ -297,7 +300,7 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
 
                     return (
                         <>
-                            <p className="text-gray-600 mb-6 text-md leading-relaxed">
+                            <p className="text-gray-600 mb-6 text-sm lg:text-md leading-relaxed">
                                 {firstBlock.content}
                             </p>
 
@@ -328,18 +331,18 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
             </section>
 
             {/* SCHOLARSHIP */}
-            <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+            <section className="bg-white p-3 lg:p-8 rounded-2xl shadow-sm border border-gray-100">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl font-bold">{college.name} Scholarships</h2>
+                    <h2 className="text-md lg:text-xl font-bold">{college.name} Scholarships</h2>
                     <button onClick={() => handleViewAll('scholarship')} className="text-blue-600 text-sm font-bold flex items-center gap-1">
                         View Scholarship Details <ChevronRight size={16} />
                     </button>
                 </div>
 
-                {scholarshipPara && <p className="text-gray-600 mb-6 text-md">{scholarshipPara}</p>}
+                {scholarshipPara && <p className="text-gray-600 mb-6 text-sm lg:text-md">{scholarshipPara}</p>}
 
                 <div className="overflow-x-auto rounded-xl border border-gray-300">
-                    <table className="w-full text-left">
+                    <table className="w-full text-left text-sm lg:text-md">
                         <thead>
                             <tr className="bg-slate-50 border-b border-gray-300">
                                 <th className="px-4 py-3 text-sm font-bold border-r border-gray-300">Scholarship Name</th>
@@ -350,23 +353,23 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
                         </thead>
                         <tbody className="">
                             {college.scholarships && college.scholarships.length > 0 ? (
-                                college.scholarships.slice(0, 5).flatMap((sch:any) => {
+                                college.scholarships.slice(0, 5).flatMap((sch) => {
                                     const schDataArray = sch.scholarship_data as unknown as Array<{ type?: string; name?: string; eligibility?: string; amount?: string; amount_desc?: string; description?: string }>;
                                     return schDataArray.slice(0, 5).map((schData, idx) => (
                                         <tr key={`${sch.id}-${idx}`} className="hover:bg-gray-50 transition-colors border-b border-gray-300 last:border-b-0">
-                                            <td className="px-4 py-3 border-r border-gray-300">
-                                                <span className="font-bold text-gray-800">{schData.name}</span>
+                                            <td className="px-4 py-3 border-r border-gray-300 ">
+                                                <p className="w-50 font-medium text-gray-800">{schData.name}</p>
                                             </td>
                                             <td className="px-4 py-3 border-r border-gray-300">
-                                                <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded uppercase">
+                                                <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded uppercase">
                                                     {schData.type || 'General'}
                                                 </span>
                                             </td>
-                                            <td className="px-4 py-3 border-r border-gray-300 text-sm text-gray-600">
-                                                {schData.eligibility}
+                                            <td className="px-4 py-3 w-50 border-r border-gray-300 text-sm text-gray-600">
+                                                <p className='w-50'>{schData.eligibility}</p>
                                             </td>
-                                            <td className="px-4 py-3 font-bold text-blue-600">
-                                                {schData.amount_desc || schData.amount}
+                                            <td className="px-4 py-3 font-medium text-blue-600">
+                                                <p className='w-40'>{schData.amount_desc || schData.amount}</p>
                                             </td>
                                         </tr>
                                     ));
@@ -384,15 +387,15 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
             </section>
 
             {/* RANKING */}
-            <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+            <section className="bg-white p-3 lg:p-8 rounded-2xl shadow-sm border border-gray-100">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl font-bold">{college.name} Rankings</h2>
+                    <h2 className="text-md lg:text-xl font-bold">{college.name} Rankings</h2>
                     <button onClick={() => handleViewAll('ranking')} className="text-blue-600 text-sm font-bold flex items-center gap-1">
-                        View All <ChevronRight size={16} />
+                        View All Rankings <ChevronRight size={16} />
                     </button>
 
                 </div>
-                <p className="text-gray-600 mb-6 text-md leading-relaxed">{rankingPara || `Rankings reflect ${college.name}'s academic excellence and reputation in engineering and technology education.`}</p>
+                <p className="text-gray-600 mb-6 text-sm lg:text-md leading-relaxed">{rankingPara || `Rankings reflect ${college.name}'s academic excellence and reputation in engineering and technology education.`}</p>
 
                 <div className="space-y-4">
                     {/* 1. Safely access the first record and the JSON data */}
@@ -421,10 +424,10 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
                                 <div className="flex items-center gap-4">
                                     <div className="flex flex-col items-center justify-center w-10 h-10 bg-white rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors">
                                         <span className="text-[10px] uppercase font-bold opacity-60">Rank</span>
-                                        <span className="text-lg font-medium leading-none">#{item.rank}</span>
+                                        <span className="text-md lg:text-lg font-medium leading-none">#{item.rank}</span>
                                     </div>
                                     <div>
-                                        <h4 className="font-medium text-gray-800">{item.org}</h4>
+                                        <h4 className="text-sm lg:text-md font-medium text-gray-800">{item.org}</h4>
                                         <p className="text-[10px] text-gray-500 uppercase font-bold tracking-tight">
                                             {item.stream} • {item.year}
                                         </p>
@@ -446,21 +449,21 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
             </section>
 
             {/* GALLERY */}
-            <section className="bg-white p-8 rounded-2xl">
+            <section className="bg-white p-3 lg:p-8 rounded-2xl">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl font-bold">{college.name} Gallery</h2>
+                    <h2 className="text-md lg:text-xl font-bold">{college.name} Gallery</h2>
                     <button onClick={() => handleViewAll('gallery')} className="text-blue-600 text-sm font-bold flex items-center gap-1">
-                        View All <ChevronRight size={16} />
+                        View All Images <ChevronRight size={16} />
                     </button>
                 </div>
-                <p className="text-gray-600">{galleryPara || ""}</p>
+                <p className="text-sm lg:text-md text-gray-600">{galleryPara || ""}</p>
                 <div className="space-y-10">
-                    {college.images?.map((cat:any) => {
+                    {college.images?.map((cat) => {
                         // Cast the JSON array correctly
                         const items = cat.media_url as unknown as GalleryMedia[];
 
                         return (
-                            <div key={cat.id} className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                            <div key={cat.id} className="bg-white mt-3 rounded-3xl ">
                                 <h3 className="text-xl font-bold mb-6 text-gray-800 flex items-center gap-2">
                                     <span className="w-2 h-6 bg-blue-600 rounded-full"></span>
                                     {cat.category}
@@ -468,7 +471,7 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                     {items.slice(0, 4)?.map((item, index) => (
-                                        <div key={index} className="group relative aspect-video md:aspect-square rounded-2xl overflow-hidden bg-slate-100 border border-gray-100">
+                                        <div key={index} className="group relative aspect-video md:aspect-square rounded-2xl overflow-hidden bg-slate-200">
 
                                             {/* Render Image or Video Thumbnail */}
 
@@ -506,9 +509,9 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
             </section>
 
             {/* CAMPUS */}
-            <section className="bg-white p-8 rounded-2xl shadow-sm">
+            <section className="bg-white p-3 lg:p-8 rounded-2xl shadow-sm">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl font-bold">{college.name} Campus Facilities</h2>
+                    <h2 className="text-md lg:text-xl font-bold">{college.name} Campus Facilities</h2>
                     <button onClick={() => handleViewAll('campus')} className="text-blue-600 text-sm font-bold flex items-center gap-1">
                         View Campus Details <ChevronRight size={16} />
                     </button>
@@ -516,21 +519,21 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
 
                 {/* Use the description from your JSON if campuspara isn't available */}
                 <div className="mb-8 ">
-                    <p className="text-gray-600 leading-relaxed text-sm md:text-base">
+                    <p className="text-gray-600 leading-relaxed text-sm lg:text-md md:text-base">
                         {campusPara || facilityData?.description || 'Details about campus infrastructure will be available soon.'}
                     </p><br />
-                    <h3 className="text-lg font-bold text-gray-800 mb-3">{facilityData?.title || "Campus Infrastructure & Student Amenities"}</h3>
+                    <h3 className="text-md lg:text-lg font-bold text-gray-800 mb-3">{facilityData?.title || "Campus Infrastructure & Student Amenities"}</h3>
 
-                    <p className="text-gray-600 leading-relaxed text-sm md:text-base">
+                    <p className="text-sm lg:text-md text-gray-600 leading-relaxed md:text-base">
                         {facilityData?.description || campusPara || 'Detailed information about the SRMIST campus infrastructure and student amenities.'}
                     </p>
                 </div>
-                <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="mt-4 lg:mt-8 grid grid-cols-2 md:grid-cols-4 gap-2 lg:gap-4">
                     {/* We slice(0, 8) to show a good variety in the overview */}
                     {facilityList.slice(0, 8).map((facility, index) => (
                         <div
                             key={index}
-                            className="flex flex-col items-center text-center p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:border-blue-200 transition-all group"
+                            className="flex flex-col items-center text-center p-2 lg:p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:border-blue-200 transition-all group"
                         >
                             <div className="bg-white p-3 rounded-xl shadow-sm mb-3 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all">
                                 <IconComponent name={facility.icon} />
@@ -550,9 +553,9 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
 
             {/* NEWS */}
 
-            <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+            <section className="bg-white p-3 lg:p-8 rounded-2xl shadow-sm border border-gray-100">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl font-bold">Latest Updates & News</h2>
+                    <h2 className="text-md lg:text-xl font-bold">Latest Updates & News</h2>
                     <button
                         onClick={() => handleViewAll('news')}
                         className="text-blue-600 text-sm font-bold flex items-center gap-1 hover:underline"
@@ -563,15 +566,15 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
 
                 <div className="space-y-4">
                     {college.news && college.news.length > 0 ? (
-                        college.news.slice(0, 3).map((item:any) => {
+                        college.news.slice(0, 3).map((item) => {
                             // Cast the JSON data for this specific news record
                             const data = item.news_data as unknown as NewsContent;
 
                             return (
-                                <div key={item.id} className="group flex gap-4 p-4 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100">
+                                <div key={item.id} className="group flex gap-4 rounded-xl my-4 hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100">
                                     {/* Date Badge */}
                                     <div className="shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex flex-col items-center justify-center text-blue-600">
-                                        <span className="text-lg font-bold leading-none">
+                                        <span className="text-md lg:text-lg font-bold leading-none">
                                             {new Date(item.published_date).getDate()}
                                         </span>
                                         <span className="text-[10px] font-bold uppercase">
@@ -594,7 +597,7 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
                                         <h3 className="font-bold text-gray-800 group-hover:text-blue-600 transition-colors line-clamp-1">
                                             {data.title}
                                         </h3>
-                                        <p className="text-sm text-gray-500 line-clamp-2 mt-1">
+                                        <p className="text-sm text-gray-500 mt-1">
                                             {data.content}</p>
                                     </div>
                                 </div>
@@ -608,18 +611,18 @@ export const OverviewTab = ({ college, setActiveTab }: TabProps) => {
             </section>
 
             {/* Q & A */}
-            <section className="bg-white p-8 rounded-2xl">
-                <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl font-bold">Q&A</h2>
+            <section className="bg-white p-3 lg:p-8 rounded-2xl">
+                <div className="flex justify-between items-center">
+                    <h2 className="text-md lg:text-xl font-bold">Q&A</h2>
                 </div>
-                <div className="bg-white p-3 rounded-2xl">
+                <div className="bg-white my-3 rounded-2xl">
                     <div className="space-y-4">
                         {overviewFAQs.length > 0 ? (
                             overviewFAQs.map((item, idx) => (
                                 <details
                                     key={idx}
                                     className="group bg-slate-50 rounded-xl border border-transparent hover:border-blue-100 transition-all">
-                                    <summary className="list-none flex items-center justify-between p-4 cursor-pointer outline-none">
+                                    <summary className="list-none flex items-center justify-between p-2 cursor-pointer outline-none">
                                         <p className="font-bold text-sm text-gray-800 flex items-start gap-3">
                                             {item.q || 'FAQ Question'}</p>
                                         <Icons.Plus
