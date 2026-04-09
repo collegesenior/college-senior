@@ -275,7 +275,7 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
                                 </span>
 
                                 <span className="bg-amber-100 text-amber-700 text-[10px] md:text-xs px-3 md:px-4 py-1 rounded-md flex items-center gap-1">
-                                    NIRF Rank {college.nirf_ranking}
+                                    NIRF RANK {college.nirf_ranking}
                                 </span>
                             </div>
                             <div className="w-15 h-15 md:w-24 md:h-24 p-2 bg-white rounded-full shrink-0 shadow-sm">
@@ -327,7 +327,7 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
             </section>
 
             {/* 2. STICKY NAV */}
-            <nav className="max-w-365 mx-auto sticky top-20 z-40 bg-white border-y border-gray-300 overflow-x-auto no-scrollbar">
+            <nav className="max-w-365 mx-auto sticky top-17 z-30 bg-white border-y border-gray-300 overflow-x-auto no-scrollbar">
                 <div className="max-w-7xl mx-auto px-4 md:px-8 flex gap-12 overflow-x-auto no-scrollbar">
                     {tabs.map((tab) => (
                         <button
@@ -379,15 +379,15 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
                     {/* --- TAB: COURSES (FULL LIST) --- */}
                     {activeTab === 'courses' && (
                         <>
-                            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-3 lg:mb-6">
-                                <div className="flex justify-between items-center">
+                            <div className="bg-green-50 border border-green-200 rounded-lg p-2 lg:p-4 mb-3 lg:mb-6">
+                                <div className="text-center justify-center lg:flex lg:justify-between items-center">
                                     <div>
-                                        <h3 className="font-semibold text-green-900">Get Course & Fee Details</h3>
-                                        <p className="text-green-700 text-sm">Get complete course information, fees structure, and admission guidance</p>
+                                        <h3 className="text-md font-medium text-green-900">Get Course & Fee Details</h3>
+                                        <p className="text-green-700 text-xs m-2">Get complete course information, fees structure, and admission guidance</p>
                                     </div>
                                     <button
                                         onClick={() => openTabEnquiryForm('Courses & Fees')}
-                                        className="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition"
+                                        className="text-sm lg:text-md bg-green-600 text-white m-1 p-1.5 lg:px-4 lg:py-2 rounded-lg font-medium hover:bg-green-700 transition"
                                     >
                                         Get Details
                                     </button>
@@ -424,23 +424,23 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
                     {activeTab === 'admission' && (
                         <>
                             <TableOfContents sections={getTableOfContents('admission')} collegeName={college.name} currentCity={college.city} />
-                            <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-3 lg:mb-6">
-                                <div className="flex justify-between items-center">
+                            <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 mb-3 lg:mb-6">
+                                <div className="text-center lg:flex lg:justify-between lg:text-left lg:items-center">
                                     <div>
-                                        <h3 className="font-semibold text-purple-900">Get Admission Guidance</h3>
-                                        <p className="text-purple-700 text-sm">Get step-by-step admission process and expert counseling</p>
+                                        <h3 className="text-sm lg:text-md font-semibold text-purple-900 m-2">Get Admission Guidance</h3>
+                                        <p className="text-purple-700 text-sm m-2">Get step-by-step admission process and expert counseling</p>
                                     </div>
                                     <button
                                         onClick={() => openTabEnquiryForm('Admission')}
-                                        className="bg-purple-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-purple-700 transition"
+                                        className="bg-purple-600 text-white p-1.5 lg:px-4 lg:py-2 rounded-lg font-medium hover:bg-purple-700 transition"
                                     >
                                         Get Guidance
                                     </button>
                                 </div>
                             </div>
-                            <section className="bg-white p-8 rounded-2xl shadow-sm" id="admission-overview">
-                                <h2 className="text-2xl font-bold mb-6">{college.name} Admission Process</h2>
-                                <p className="text-gray-600 mb-6 text-md">{admissionPara}</p>
+                            <section className="bg-white p-3 lg:p-8 rounded-2xl shadow-sm" id="admission-overview">
+                                <h2 className="text-md lg:text-xl font-bold mb-3">{college.name} Admission Process</h2>
+                                <p className="text-gray-600 mb-3 text-sm lg:text-md">{admissionPara}</p>
                                 <div id="step-by-step-admission-process-2026">
                                     <AdmissionTab admissions={college.admissions as unknown as Array<{ id: number; college_id: number; admission_data: Array<{ degree_level: string; streams: Array<{ stream_name: string; courses: Array<{ course_title: string; content: string; duration: string; fees: string; seats: string; eligibility: string; entrance_exam: string; selection_process: string; cutoff_info: string }> }> }>; admission_process?: Array<{ step: number; title: string; content: string }> }>} collegeName={college.name} admissionPara={admissionPara} faqs={college.faqs?.[0]?.faq_data as unknown as Array<{ category: string; questions: Array<{ q: string; a: string }> }>} />
                                 </div>
@@ -720,7 +720,7 @@ export default function CollegeClientView({ college, similarColleges }: { colleg
 
                 {/* --- RIGHT SIDEBAR --- */}
                 <aside className="lg:w-1/4">
-                    <div className="bg-blue-600 rounded-xl p-6 text-white sticky top-35">
+                    <div className="bg-blue-600 rounded-xl mb-3 p-6 text-white sticky top-35">
                         <h3 className="text-lg font-bold mb-2">Get Admission Help</h3>
                         <p className="text-blue-100 text-sm mb-4">Get expert guidance for {college.name} admissions</p>
                         <div className="space-y-5">
