@@ -66,7 +66,7 @@ const RankingTab: React.FC<RankingTabProps> = ({ rankings, collegeName, collegeN
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
                 NIRF Ranking 2024
               </h2>
-              <div className="text-6xl font-bold text-blue-600 mb-2">
+              <div className="text-2xl font-bold text-blue-600 mb-2">
                 #{collegeNirfRank}
               </div>
               <p className="text-gray-600 mb-4">
@@ -190,12 +190,12 @@ const RankingTab: React.FC<RankingTabProps> = ({ rankings, collegeName, collegeN
 
   // Helper function to get ranking performance level
   const getRankingLevel = (rank: number) => {
-    if (rank <= 10) return { level: 'Elite', color: 'text-green-600', bg: 'bg-green-50' };
-    if (rank <= 50) return { level: 'Top Tier', color: 'text-blue-600', bg: 'bg-blue-50' };
-    if (rank <= 100) return { level: 'Excellent', color: 'text-indigo-600', bg: 'bg-indigo-50' };
-    if (rank <= 200) return { level: 'Very Good', color: 'text-purple-600', bg: 'bg-purple-50' };
-    if (rank <= 300) return { level: 'Good', color: 'text-orange-600', bg: 'bg-orange-50' };
-    return { level: 'Recognized', color: 'text-gray-600', bg: 'bg-gray-50' };
+    if (rank <= 10) return { level: 'Elite', color: 'text-green-600', bg: 'bg-green-100' };
+    if (rank <= 50) return { level: 'Top Tier', color: 'text-blue-600', bg: 'bg-blue-100' };
+    if (rank <= 100) return { level: 'Excellent', color: 'text-indigo-600', bg: 'bg-indigo-100' };
+    if (rank <= 200) return { level: 'Very Good', color: 'text-purple-600', bg: 'bg-purple-100' };
+    if (rank <= 300) return { level: 'Good', color: 'text-orange-600', bg: 'bg-orange-100' };
+    return { level: 'Recognized', color: 'text-gray-600', bg: 'bg-gray-100' };
   };
 
   return (
@@ -205,8 +205,8 @@ const RankingTab: React.FC<RankingTabProps> = ({ rankings, collegeName, collegeN
       {rankedItems.length > 0 && (
         <>
           <div className="mb-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-2">Ranking Achievements {currentYear}</h2>
-            <p className="text-gray-600 text-sm">Official rankings from recognized ranking agencies</p>
+            <h2 className="text-md md:text-xl font-bold text-gray-900 mb-2">Ranking Achievements {currentYear}</h2>
+            <p className="text-gray-600 text-sm md:text-md">Official rankings from recognized ranking agencies</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {rankedItems.map((item, idx) => {
@@ -214,9 +214,9 @@ const RankingTab: React.FC<RankingTabProps> = ({ rankings, collegeName, collegeN
               const rankLevel = getRankingLevel(item.rank!);
               
               return (
-                <div key={idx} className={`p-6 rounded-3xl border shadow-sm hover:shadow-md transition-all bg-white border-gray-200`}>
-                  <div className="flex justify-between items-start mb-4">
-                    <div className={`p-2 rounded-xl ${rankLevel.bg}`}>
+                <div key={idx} className={`p-3 lg:p-6 rounded-3xl border shadow-sm hover:shadow-md transition-all bg-white border-gray-200`}>
+                  <div className="flex justify-between items-start ">
+                    <div className={`p-2 mb-2 rounded-xl ${rankLevel.bg}`}>
                       <Award size={20} className={rankLevel.color} />
                     </div>
                     {trend !== null && (
@@ -231,10 +231,10 @@ const RankingTab: React.FC<RankingTabProps> = ({ rankings, collegeName, collegeN
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">{item.org}</p>
                   <h4 className="text-2xl font-bold text-slate-800 mt-1">{item.rank}</h4>
                   <p className="text-xs text-slate-500 mt-1 font-medium mb-3">{item.stream}</p>
-                  <div className={`mb-3 px-2 py-1 rounded-full text-[10px] font-medium ${rankLevel.bg} ${rankLevel.color} inline-block`}>
+                  <div className={` px-2 py-1 rounded-full text-[10px] font-medium ${rankLevel.bg} ${rankLevel.color} inline-block`}>
                     {rankLevel.level}
                   </div>
-                  <p className="text-xs text-gray-600 leading-relaxed my-5">
+                  <p className="text-xs text-gray-600 leading-relaxed my-2">
                     {item.desc}
                   </p>
                 </div>
@@ -327,14 +327,14 @@ const RankingTab: React.FC<RankingTabProps> = ({ rankings, collegeName, collegeN
           : `The table below shows ${agency} ranking trends across major categories. The institution has shown ${statusText} in the ${currentRecord?.stream || 'Overall'} category compared to the previous year.`;
 
         return (
-          <section key={agency} className="ranking-agency-block mb-12">
+          <section key={agency} className="ranking-agency-block mb-6">
             <div className="mb-6">
-              <h2 className="text-xl font-bold text-slate-800 mb-3">
+              <h2 className="text-md md:text-xl font-bold text-slate-800 mb-3">
                 {collegeName} {agency} Ranking {currentYear}
               </h2>
               <p className="text-slate-600 text-sm leading-relaxed mb-6">{introText}</p>
 
-              <h3 className="text-md font-bold text-slate-800 mb-2">
+              <h3 className="text-sm md:text-md font-bold text-slate-800 mb-2">
                 {collegeName} {agency} Historical Performance
               </h3>
               <p className="text-sm text-slate-500 mb-4 italic">
@@ -343,7 +343,7 @@ const RankingTab: React.FC<RankingTabProps> = ({ rankings, collegeName, collegeN
             </div>
 
             {/* Multi-Year Ranking Comparison Table */}
-            <div className="overflow-hidden rounded-2xl border border-slate-200 shadow-sm bg-white mb-6">
+            <div className="overflow-scroll rounded-2xl border border-slate-200 shadow-sm bg-white mb-6">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-slate-50">
@@ -398,7 +398,7 @@ const RankingTab: React.FC<RankingTabProps> = ({ rankings, collegeName, collegeN
 
             {/* Current Year Description */}
             {currentRecord?.desc && (
-              <div className="bg-slate-50 rounded-xl p-6 mb-4">
+              <div className="bg-slate-50 rounded-xl p-3 mb-4">
                 <h4 className="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
                   <Info size={16} className="text-blue-600" />
                   {currentYear} {agency} Performance
@@ -411,7 +411,7 @@ const RankingTab: React.FC<RankingTabProps> = ({ rankings, collegeName, collegeN
 
             {/* Historical Context */}
             {orgData.length > 1 && (
-              <div className="bg-blue-50 rounded-xl p-6">
+              <div className="bg-blue-50 rounded-xl p-3">
                 <h4 className="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
                   <BarChart3 size={16} className="text-blue-600" />
                   Historical Performance Summary
@@ -442,25 +442,25 @@ const RankingTab: React.FC<RankingTabProps> = ({ rankings, collegeName, collegeN
       })}
       {/* SECTION 3: TREND GRAPH & TABLE */}
       {shouldShowChart && rankedItems.length > 0 ? (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:flex gap-5 md:gap-8">
           
           {/* Left: Trend Graph */}
-          <div className="lg:col-span-2 bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
-            <div className="flex items-center justify-between mb-8">
-              <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-                <BarChart3 className="text-blue-600" /> {chartOrgName} Ranking Progress ({prevYear} - {currentYear})
+          <div className="lg:w-3/5 bg-white p-3 md:p-8 rounded-3xl border border-slate-200 shadow-sm">
+            <div className="md:flex items-center justify-between mb-8">
+              <h3 className="text-md lg:text-lg font-bold text-slate-800 flex items-center gap-2">
+                <BarChart3 className="text-blue-600" size={20} /> {chartOrgName} Ranking Progress ({prevYear} - {currentYear})
               </h3>
               <span className="text-[10px] font-bold bg-slate-100 px-3 py-1 rounded-full text-slate-500">Multi-Year Trend</span>
             </div>
             
-            <div className="h-75 w-full">
+            <div className="h-60 md:h-75 mr-3 -ml-5">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                  <CartesianGrid strokeDasharray="10 10" vertical={false} stroke="#f1f5f9" />
                   <XAxis dataKey="year" axisLine={true} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} />
                   <YAxis reversed axisLine={true} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} domain={['auto', 'auto']} />
                   <Tooltip 
-                    contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}
+                    contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 17px -3px rgba(0,0,0,0.1)' }}
                   />
                   <Line 
                     type="monotone" 
@@ -476,14 +476,14 @@ const RankingTab: React.FC<RankingTabProps> = ({ rankings, collegeName, collegeN
           </div>
 
           {/* Right: Score Breakdown */}
-          <div className="bg-amber-300/80 rounded-3xl p-8 text-black relative overflow-hidden">
-            <Info className="absolute -right-4 -top-4 size-24 text-yellow-200/90" />
-            <h3 className="text-lg font-bold mb-6">Why this Rank?</h3>
+          <div className="bg-[#0d68f2] lg:w-2/5 text-white rounded-3xl p-4 md:p-8  relative overflow-hidden">
+            <Info className="absolute -right-4 -top-4 size-24 text-blue-500" />
+            <h3 className="text-md md:text-lg font-bold mb-6">Why this Rank?</h3>
             <div className="space-y-6">
               {currentRankings.slice(0, 2).map((item, i) => (
-                <div key={i} className="border-l-2 border-blue-600 pl-4">
-                  <p className="text-xs font-bold text-blue-600 uppercase tracking-tighter">{item.org} - {item.stream}</p>
-                  <p className="text-sm mt-2 leading-relaxed italic">
+                <div key={i} className="border-l-2 border-white-600 pl-4">
+                  <p className="text-xs font-bold text-white uppercase ">{item.org} - {item.stream}</p>
+                  <p className="text-sm mt-2 italic">
                     {item.desc || `Ranked #${item.rank} based on comprehensive evaluation of academic excellence, research output, and institutional performance.`}
                   </p>
                   {item.score && (
