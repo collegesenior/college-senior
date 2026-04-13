@@ -75,20 +75,20 @@ const PlacementTab: React.FC<PlacementTabProps> = ({ placements, collegeName, fa
     <div className="space-y-12">
       {/* Title and Content */}
       <div className="space-y-6">
-        <h2 className="text-xl font-bold text-slate-800">{collegeName} - {data.title}</h2>
-        <p className="text-slate-600 leading-relaxed">{data.content}</p>
+        <h2 className="text-md lg:text-xl font-bold text-slate-800">{collegeName} - {data.title}</h2>
+        <p className="text-sm lg:text-md text-slate-600 leading-relaxed">{data.content}</p>
       </div>
 
       {/* Placement Stats Table */}
       {stats && (
         <div className="space-y-6">
-          <h3 className="text-xl font-bold text-slate-800">{collegeName} {stats.title}</h3>
+          <h3 className="text-md lg:text-xl font-bold text-slate-800">{collegeName} {stats.title}</h3>
           <div className="border border-slate-200">
             <table className="w-full">
               <thead>
                 <tr className="bg-slate-100 border-b border-slate-200">
-                  <th className="px-4 py-3 text-left text-sm font-bold text-slate-700 border-r border-slate-200">Metric</th>
-                  <th className="px-4 py-3 text-left text-sm font-bold text-slate-700">Details ({stats.degree || 'UG'})</th>
+                  <th className="px-4 py-3 text-left text-sm font-bold text-slate-800 border-r border-slate-200">Metric</th>
+                  <th className="px-4 py-3 text-left text-sm font-bold text-slate-800">Details ({stats.degree || 'UG'})</th>
                 </tr>
               </thead>
               <tbody>
@@ -117,10 +117,10 @@ const PlacementTab: React.FC<PlacementTabProps> = ({ placements, collegeName, fa
       {/* Top Recruiters */}
       {recruiters.length > 0 && (
         <div className="space-y-4">
-          <h3 className="text-xl font-bold text-slate-800">{collegeName} Top Recruiters</h3>
+          <h3 className="text-md lg:text-xl font-bold text-slate-800">{collegeName} Top Recruiters</h3>
           <div className="flex flex-wrap gap-3">
             {recruiters.map((recruiter, index) => (
-              <div key={index} className="px-4 py-2 bg-blue-100 border border-blue-300 rounded-bl rounded-full text-sm font-medium text-gray-700">
+              <div key={index} className="p-1.5 lg:px-4 lg:py-2 bg-blue-100 border border-blue-300 rounded-bl rounded-full text-sm font-medium text-gray-700">
                 {recruiter}
               </div>
             ))}
@@ -130,12 +130,12 @@ const PlacementTab: React.FC<PlacementTabProps> = ({ placements, collegeName, fa
 
       {/* Objectives Section */}
       <div className="bg-slate-50">
-        <h3 className="text-xl font-bold text-slate-800 mb-4">{collegeName} - {data.objectives_title}</h3>
+        <h3 className="text-md lg:text-xl font-bold text-slate-800 mb-4">{collegeName} - {data.objectives_title}</h3>
         <div className="space-y-3 p-3 px-2">
           {data.objectives.map((obj, i) => (
             <div key={i} className="flex items-start gap-3">
-              <CheckCircle2 className="text-blue-600 shrink-0 mt-1" size={20} />
-              <p className="text-slate-600 text-md">{obj}</p>
+              <CheckCircle2 className="text-blue-600 shrink-0 mt-1" size={18} />
+              <p className="text-slate-600 text-sm lg:text-md">{obj}</p>
             </div>
           ))}
         </div>
@@ -143,7 +143,7 @@ const PlacementTab: React.FC<PlacementTabProps> = ({ placements, collegeName, fa
 
       {/* Placement Process */}
       <div className="space-y-6">
-        <h3 className="text-lg font-bold text-slate-800 pb-2">
+        <h3 className="text-md lg:text-lg font-bold text-slate-800 pb-2">
           {collegeName} - {data.process_title}
         </h3>
         <div className="space-y-4 border-l-2 border-blue-400 pl-4">
@@ -154,7 +154,7 @@ const PlacementTab: React.FC<PlacementTabProps> = ({ placements, collegeName, fa
               </div>
               <div className="flex-1">
                 <h4 className="font-bold text-slate-800 mb-1">{p.name}</h4>
-                <p className="text-md text-slate-600">{p.desc}</p>
+                <p className="text-sm lg:text-md text-slate-600">{p.desc}</p>
               </div>
             </div>
           ))}
@@ -163,15 +163,15 @@ const PlacementTab: React.FC<PlacementTabProps> = ({ placements, collegeName, fa
 
       {/* FAQ Section */}
       {placementFAQs.length > 0 && (
-        <div className="bg-white mt-6 p-3 rounded-xl border border-gray-100">
+        <div className="bg-white mt-6 rounded-xl border border-gray-100">
           <h3 className="text-lg font-bold mb-4">Placement FAQs</h3>
           <div className="space-y-4">
             {placementFAQs.map((item, idx) => (
               <details
                 key={idx}
                 className="group bg-slate-50 rounded-xl border border-transparent hover:border-blue-100 transition-all">
-                <summary className="list-none flex items-center justify-between p-3 cursor-pointer outline-none">
-                  <p className="font-bold text-sm text-gray-800 flex items-start gap-3">
+                <summary className="list-none flex items-center justify-between p-1.5 lg:p-3 cursor-pointer outline-none">
+                  <p className="font-bold text-sm text-gray-800 w-[85%] flex items-start gap-3">
                     {item.q}
                   </p>
                   <Icons.Plus
