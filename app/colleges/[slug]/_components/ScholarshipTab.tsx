@@ -25,8 +25,8 @@ const ScholarshipTab: React.FC<ScholarshipTabProps> = ({ scholarships, collegeNa
                 <div key={idx} className="mt-4">
                     <div className="flex items-start gap-2">
                         <div>
-                            <h3 className="text-lg font-bold text-gray-800">{collegeName} {data.name}</h3>
-                            <p className="text-md text-gray-600 mt-1">{data.description}</p>
+                            <h3 className="text-md lg:text-lg font-bold text-gray-800 mb-3">{collegeName} {data.name}</h3>
+                            <p className="text-md text-gray-600 mt-1 text-sm lg:text-md">{data.description}</p>
                         </div>
                     </div>
                 </div>
@@ -38,35 +38,35 @@ const ScholarshipTab: React.FC<ScholarshipTabProps> = ({ scholarships, collegeNa
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-slate-50 border-b border-gray-300">
-                                <th className="px-2 py-2 text-center text-md font-bold border-r border-gray-300">Scholarship Name</th>
-                                <th className="px-2 py-2 text-center text-md font-bold border-r border-gray-300">Type</th>
-                                <th className="px-2 py-2 text-center text-md font-bold border-r border-gray-300">Deadline</th>
-                                <th className="px-2 py-2 text-center text-md font-bold border-r border-gray-300">Eligibility</th>
-                                <th className="px-2 py-2 text-center text-md font-bold">Benefit</th>
+                                <th className="px-2 py-2 text-center text-sm lg:text-md font-bold border-r border-gray-300">Scholarship Name</th>
+                                <th className="px-2 py-2 text-center text-sm lg:text-md font-bold border-r border-gray-300">Type</th>
+                                <th className="px-2 py-2 text-center text-sm lg:text-md font-bold border-r border-gray-300">Deadline</th>
+                                <th className="px-2 py-2 text-center text-sm lg:text-md font-bold border-r border-gray-300">Eligibility</th>
+                                <th className="px-2 py-2 text-center text-sm lg:text-md font-bold">Benefit</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
                             {scholarships[0]?.scholarship_data?.map((data, idx) => (
-                                <tr key={idx} className="hover:bg-gray-50 transition-colors">
+                                <tr key={idx} className="hover:bg-gray-50 transition-colors text-sm lg:text-md">
                                     <td className="px-2 py-3 border-r border-gray-300">
-                                        <span className="text-gray-800">{data.name}</span>
+                                        <p className="text-gray-800 w-40">{data.name}</p>
                                     </td>
                                     <td className="px-2 py-3 border-r border-gray-300">
-                                        <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded uppercase">
+                                        <p className="px-2 py-1 bg-blue-100 text-blue-700 font-bold rounded uppercase">
                                             {data.type}
-                                        </span>
+                                        </p>
                                     </td>
                                     <td className="px-2 py-3 border-r border-gray-300">
-                                        <div className="flex items-center gap-1 text-sm text-gray-600">
+                                        <p className="flex items-center w-30 gap-1 text-gray-600">
 
                                             {data.deadline}
-                                        </div>
+                                        </p>
                                     </td>
-                                    <td className="px-2 py-3 border-r border-gray-300 text-md text-gray-600">
-                                        {data.eligibility}
+                                    <td className="px-2 py-3 border-r border-gray-300 text-gray-600">
+                                        <p className='w-50'>{data.eligibility}</p>
                                     </td>
                                     <td className="px-2 py-3">
-                                        <span className="font-bold text-blue-600 text-md">{data.amount_desc}</span>
+                                        <p className="font-bold text-blue-600 w-45">{data.amount_desc}</p>
                                     </td>
                                 </tr>
                             ))}
@@ -78,23 +78,23 @@ const ScholarshipTab: React.FC<ScholarshipTabProps> = ({ scholarships, collegeNa
 
             {/* Part 3: FAQs Section */}
             {scholarshipFAQs.length > 0 && (
-                <div className="bg-white mt-6 p-3 rounded-xl border border-gray-100">
-                    <h3 className="text-lg font-bold mb-4">Scholarship FAQs</h3>
-                    <div className="bg-white p-3 rounded-2xl">
+                <div className="bg-white mt-6 rounded-xl border border-gray-100">
+                    <h3 className="text-md lg:text-lg font-bold mb-3">Scholarship FAQs</h3>
+                    <div className="bg-white rounded-2xl">
                         <div className="space-y-4">
                             {scholarshipFAQs.length > 0 ? (
                                 scholarshipFAQs.map((item, idx) => (
                                     <details
                                         key={idx}
                                         className="group bg-slate-50 rounded-xl border border-transparent hover:border-blue-100 transition-all">
-                                        <summary className="list-none flex items-center justify-between p-3 cursor-pointer outline-none">
-                                            <p className="font-bold text-sm text-gray-800 flex items-start gap-3">
+                                        <summary className="list-none flex items-center justify-between  cursor-pointer outline-none">
+                                            <p className="text-sm text-gray-800 w-[85%] flex items-start gap-3">
                                                 {item.q || 'FAQ Question'}</p>
                                             <Icons.Plus
                                                 size={16}
                                                 className="text-blue-500 transition-transform group-open:rotate-45" />
                                         </summary>
-                                        <div className="px-4 pb-4 ml-7 animate-in fade-in slide-in-from-top-1">
+                                        <div className="px-4 pb-4 animate-in fade-in slide-in-from-top-1">
                                             <p className="text-gray-600 text-sm leading-relaxed border-t border-gray-200 pt-3">
                                                 {item.a || 'FAQ Answer'} </p>
                                         </div>
